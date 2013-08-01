@@ -1,0 +1,147 @@
+SeaV4X
+
+TODO list:
+	Command system: Add more commands: Account commands
+	Next milestone: Account system
+
+
+Pie-in-Sky List:
+	Move socket reading and parsing to own thread
+	Scripting
+	Command masking
+	Plugin loading
+
+Command system:
+	/acc/*  : account management
+	/acc/mk -name|-n <account name> -password|-p <password hash> [-class|-c <permission class>]
+		Creates new account
+	/acc/rm -name|-n <account name>
+		Deletes account
+	/acc/lk -name|-n <account name> [-time|-t <time>] [-unlock|-u]
+		Locks account for given amount of time. If u is specified,
+		unlocks.
+	/acc/ls [-dir|-d <directory name>]
+		Lists everything in current directory
+
+	/prc/*  : process management
+	/prc/stop [-time|-t <time>] [-message|-m <message>] [-interval|-i <time>]
+		Stops the server
+	
+	/hs/*  : Handshaking
+	/hs/v
+		Communication protocol version. This command should not change. Should
+		return integer dot integer
+	/hs/serv
+		Returns server version number
+	/hs/mod
+		Returns "vanilla"
+		
+	/dat/* : Data directory
+	/dat/account [-all|-a] [#<account id>] [-name|-n] [-id|i] [-client|-c] [-player|-p]
+		List of accounts with data
+			-all|-a : list all columns
+			#<account id>: only show specified account 
+			-name|-n : show name column
+			-id|-i : show account id column
+			-client|-c : show client id column
+			-player|-p : show player id column
+	/dat/client [-all|-a] [#<client id>] [-ip|-p] [-account|-t] [-player|-p]
+		List of connected clients
+			-all|-a : list all columns
+			#<client id> only show specified client
+			-ip|-p : list ip addresses
+			-account|-t : show account id column
+			-player|-p : show player id column
+	/dat/player [-all|-a] [#<player id>] [-name|-n] [-id|-i] [-client|-c] [-account|-t]
+		List of players
+	/dat/team  [-all|-a] [#<team id>] [-name|-n] [-id|-i]
+		List of teams
+	/dat/assign [-all|-a] [-team|-t <team id>] [-player|-p <player id>]
+		List of team-player pairing assignments
+		
+	/debug/* : Debugging utilities
+	/debug/echo [-message|-m <message>]
+		Returns message, or 'echo' by default
+	/debug/huh
+		Returns command misunderstood error
+	/debug/error [#<error number>] [-name|-n <error name>]
+		Returns error number, name, and level by id or name. Returns complete
+		list if no parameters specified
+
+Command system stored on file as:
+
+Domain Listing
+ID, Domain name, Parent name, Help Info (? command)
+
+Command Listing
+ID, Command name, domain id, help info
+
+
+Command packet: \t acts as pipe between commands, \n starts fresh
+	<Echo String> \t <command> <parameters> \t <commands> <parameters> ... \n
+
+Client side echos:
+	GUI - automated stuff, don't show to console)
+	PING - Calls server to push data to client
+		Server attempts to send buffered 'push' data to client
+		that accumulated since last ping. Help track lagging clients
+	CON - Show to console
+	RAW - Show to console in raw table form
+	
+
+User structures:
+	Account - Persistent storage of user data, bound to permissions. Permissions
+		are per command or per domain (recursive include)
+	Client  - A connected user.
+	Player  - Storage of a user's game data, lasts per game.
+
+	Parent -> *child
+	-----------------
+	Client -> *account
+	Account -> *player
+	
+	Server keeps list of accounts, clients, teams, and players
+	
+Permissions:
+	- Per account, default is no permission
+	- Add (sub)domain
+	- Add command
+	- Allowed to pipe data
+	
+In game player structure:
+	Teams have lists of players
+
+
+Server response format:
+Title \n
+Col   1 \t Col   2 \t Col   3 . . . \t \n
+val   1 \t val   2 \t val   3 . . . \t
+val n+1 \t val n+2 \t val n+3 . . . \t
+...
+
+
+Server command function parameters:
+- Pipe in : Pointer to pipe-in table structure
+- Pipe out: Pointer to pipe-out table structure
+- Error pipe: Error data structure, contains 'stack trace'?
+- Parameter list structure
+- Pointer to account to act on behalf
+- Pointer to server data structure
+Pipe in pointers will be null if no permission given to use pipes
+
+
+Account format:
+/index.txt
+	- Global list of active accounts
+
+/account/<account name>
+	- Directory of information for a given account
+
+/account/<account name>/info.txt
+	- Primary information about account
+	- Password
+
+/account/<account name>/permission.txt
+	- List of permissions
+	- Format: [+ | * | -] \t [directory name | permission class if *]
+	

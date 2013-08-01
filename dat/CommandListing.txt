@@ -1,0 +1,8 @@
+id	name	domain	info
+1	v	/hs	Communication protocol version. Should not change for compatibility. Returns single integer
+2	serv	/hs	Server version number
+3	mod	/hs	Returns mod information, if server is modded.
+4	stop	/prc	shuts down the server
+5	ls	/dat	Lists commands for a directory. STDin is list of columns to use
+6	col	/util	Sets a list of column name for other methods to specify output
+7	msg	/chat	Sends a chat message

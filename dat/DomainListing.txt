@@ -1,0 +1,10 @@
+id	name	parent	info
+1	hs	/	Hand shaking functions
+2	debug	/	Debug functionality for development and testing
+3	dat	/	Functions for getting internal server data structures
+4	prc	/	Functions for controlling the server as a process
+5	acc	/	Functions for account management
+6	man	/acc	Management of accounts
+7	log	/acc	Client login functions
+8	util	/	Utility functions
+9	chat	/	Chat functions
