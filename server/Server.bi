@@ -18,7 +18,7 @@ Type Server
 	Dim As SOCKET sock_l
 	
 	/' List of accounts '/
-	Dim pAcc As Account Ptr
+	Dim accMan As AccountManager
 	
 	/' List of clients '/
 	Dim pClient As Client Ptr

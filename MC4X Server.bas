@@ -108,6 +108,8 @@ EndIf
 
 
 /' Lookup accounts '/
+Print "Loading accounts . . ."
+serv.accMan.loadFromDisk(ACCOUNT_LIST_FILE)
 
 
 Print "Running server's main()"
