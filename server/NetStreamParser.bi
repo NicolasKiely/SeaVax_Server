@@ -13,7 +13,7 @@
 /' Stream delimiter  ; '/
 #Define CMD_STREAM_DEL 59
 
-#Define CMD_STREAM_QUOTE 34
+#Define CMD_STREAM_QUOTE 39
 
 
 /' List of command/parameter strings from stream'/

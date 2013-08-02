@@ -11,62 +11,6 @@ Pie-in-Sky List:
 	Command masking
 	Plugin loading
 
-Command system:
-	/acc/*  : account management
-	/acc/mk -name|-n <account name> -password|-p <password hash> [-class|-c <permission class>]
-		Creates new account
-	/acc/rm -name|-n <account name>
-		Deletes account
-	/acc/lk -name|-n <account name> [-time|-t <time>] [-unlock|-u]
-		Locks account for given amount of time. If u is specified,
-		unlocks.
-	/acc/ls [-dir|-d <directory name>]
-		Lists everything in current directory
-
-	/prc/*  : process management
-	/prc/stop [-time|-t <time>] [-message|-m <message>] [-interval|-i <time>]
-		Stops the server
-	
-	/hs/*  : Handshaking
-	/hs/v
-		Communication protocol version. This command should not change. Should
-		return integer dot integer
-	/hs/serv
-		Returns server version number
-	/hs/mod
-		Returns "vanilla"
-		
-	/dat/* : Data directory
-	/dat/account [-all|-a] [#<account id>] [-name|-n] [-id|i] [-client|-c] [-player|-p]
-		List of accounts with data
-			-all|-a : list all columns
-			#<account id>: only show specified account 
-			-name|-n : show name column
-			-id|-i : show account id column
-			-client|-c : show client id column
-			-player|-p : show player id column
-	/dat/client [-all|-a] [#<client id>] [-ip|-p] [-account|-t] [-player|-p]
-		List of connected clients
-			-all|-a : list all columns
-			#<client id> only show specified client
-			-ip|-p : list ip addresses
-			-account|-t : show account id column
-			-player|-p : show player id column
-	/dat/player [-all|-a] [#<player id>] [-name|-n] [-id|-i] [-client|-c] [-account|-t]
-		List of players
-	/dat/team  [-all|-a] [#<team id>] [-name|-n] [-id|-i]
-		List of teams
-	/dat/assign [-all|-a] [-team|-t <team id>] [-player|-p <player id>]
-		List of team-player pairing assignments
-		
-	/debug/* : Debugging utilities
-	/debug/echo [-message|-m <message>]
-		Returns message, or 'echo' by default
-	/debug/huh
-		Returns command misunderstood error
-	/debug/error [#<error number>] [-name|-n <error name>]
-		Returns error number, name, and level by id or name. Returns complete
-		list if no parameters specified
 
 Command system stored on file as:
 

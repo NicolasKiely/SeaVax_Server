@@ -192,10 +192,11 @@ Function parseNetStream(zOldBuf As ZRing Ptr, zNewBuf As ZString Ptr, _
 					
 				Else
 					/' Just add to parameter '/
-					pLast->text += Chr(c)
-					
 					If c = CMD_STREAM_QUOTE Then
 						inQuotes = Not(inQuotes)
+						
+					Else
+						pLast->text += Chr(c)
 					EndIf
 				EndIf
 		End Select
