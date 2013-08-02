@@ -81,6 +81,8 @@ Type Table
 	Declare Function getColumnID(columnName As String) As Integer
 	Declare Function getColumnID_IC(columnName As String) As Integer
 	
+	/' Returns second value column for a given first-column key '/
+	Declare Function findValue(key As String) As String
 	
 	/' Deletes record, column, and header data '/
 	Declare Sub refresh()

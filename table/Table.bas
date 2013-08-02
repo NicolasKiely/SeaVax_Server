@@ -3,14 +3,14 @@
 
 
 Constructor Fld()
-	value = ""
-	pNext = 0
+	this.value = ""
+	this.pNext = 0
 End Constructor
 
 
 Destructor Fld()
-	If pNext <> 0 Then Delete pNext
-	value = ""
+	If this.pNext <> 0 Then Delete this.pNext
+	this.value = ""
 End Destructor
 
 
@@ -24,15 +24,16 @@ End Function
 
 
 Constructor Record()
-	pFld = 0
-	lFld = 0
-	pNext = 0
+	this.pFld = 0
+	this.lFld = 0
+
+	this.pNext = 0
 End Constructor
 
 
 Destructor Record()
-	If pFld <> 0 Then Delete pFld
-	If pNext <> 0 Then Delete pNext
+	If this.pFld <> 0 Then Delete pFld
+	If this.pNext <> 0 Then Delete pNext
 End Destructor
 
 
@@ -376,3 +377,29 @@ Sub Table.refresh()
 	colNum = 0
 	recNum = 0
 End Sub
+
+
+Function Table.findValue(key As String) As String
+	Dim As String results = ""
+	
+	/' Loop through records '/
+	Dim As Record Ptr pTemp = this.pRec
+	While pTemp <> 0
+		/' Make sure fields exist '/
+		Dim As Fld Ptr pKeyFld = pTemp->pFld
+		Dim As Fld Ptr pValFld
+		If pKeyFld = 0 Then Continue While
+		pValFld = pKeyFld->pNext
+		If pValFld = 0 Then Continue While
+		
+		If pKeyFld->value = key Then
+			/' Found match '/
+			results = pValFld->value
+			Exit While
+		EndIf
+		
+		pTemp = pTemp->pNext
+	Wend
+	
+	Return results
+End Function
