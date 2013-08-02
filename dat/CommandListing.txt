@@ -6,3 +6,4 @@ id	name	domain	info
 5	ls	/dat	Lists commands for a directory. STDin is list of columns to use
 6	col	/util	Sets a list of column name for other methods to specify output
 7	msg	/chat	Sends a chat message
+8	login	/acc/log	Attempt to log in to an account

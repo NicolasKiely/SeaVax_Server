@@ -36,6 +36,8 @@ Type AccountManager
 	/' Adds new account to list '/
 	Declare Sub addAccount(pNewAccount As Account Ptr)
 	
+	/' Looks up an account by name '/
+	Declare Function lookupAccount(accName As String) As Account Ptr
 	
 	
 	Declare Constructor()

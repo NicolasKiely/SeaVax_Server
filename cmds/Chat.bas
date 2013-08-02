@@ -2,7 +2,8 @@
 #Include Once "../server/Server.bi"
 
 
-/' Parameters:
+/' Command name: /msg/chat
+ ' Parameters:
  ' - (r)oom : specific chat room to say
  ' - (m)essage: Message to say
  '

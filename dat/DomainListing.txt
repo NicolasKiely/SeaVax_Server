@@ -4,7 +4,7 @@ id	name	parent	info
 3	dat	/	Functions for getting internal server data structures
 4	prc	/	Functions for controlling the server as a process
 5	acc	/	Functions for account management
-6	man	/acc	Management of accounts
-7	log	/acc	Client login functions
+6	man	/acc	Admin management of accounts
+7	log	/acc	Client-side account managent
 8	util	/	Utility functions
 9	chat	/	Chat functions

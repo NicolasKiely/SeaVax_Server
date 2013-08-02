@@ -78,9 +78,24 @@ Sub AccountManager.addAccount(pNewAccount As Account Ptr)
 End Sub
 
 
+Function AccountManager.lookupAccount(accName As String) As Account Ptr
+	Dim As Account Ptr pTemp = this.pAcc
+	While pTemp <> 0
+		If pTemp->userName = accName Then
+			Return pTemp
+		EndIf
+		
+		pTemp = pTemp->pNext
+	Wend
+	
+	Return 0
+End Function
+
+
 Function loadSavedAccount(pAcc As Account Ptr) As Integer
 	If pAcc = 0 Then Return 1
 	If pAcc->userName = "" Then Return 2
+	If pAcc->isLoaded <> 0 Then Return 0
 	
 	Dim As String baseDir = ACCOUNT_ROOT_DIR + pAcc->userName + "/"
 	
@@ -88,5 +103,9 @@ Function loadSavedAccount(pAcc As Account Ptr) As Integer
 	Dim As String infoFileName = baseDir + "info.txt"
 	Dim As Table Ptr pInfoTab = loadTableFromFile(infoFileName)
 	
+	pAcc->pass = pInfoTab->findValue("password")
+	
 	Delete pInfoTab
+	pAcc->isLoaded = -1
+	Return 0
 End Function
