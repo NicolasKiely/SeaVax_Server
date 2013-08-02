@@ -109,7 +109,17 @@ EndIf
 
 /' Lookup accounts '/
 Print "Loading accounts . . ."
-serv.accMan.loadFromDisk(ACCOUNT_LIST_FILE)
+Dim As Integer accNum = serv.accMan.loadFromDisk(ACCOUNT_LIST_FILE)
+If accNum = 0 Then
+	Print "No accounts loaded"
+	
+ElseIf accNum = 1 Then
+	Print "Loaded one account"
+	
+Else
+	Print "Loaded " +Str(accNum)+ " accounts"
+EndIf
+
 
 
 Print "Running server's main()"

@@ -2,6 +2,21 @@
 #Include Once "../table/Table.bi"
 
 
+Constructor Account()
+	this.userName = ""
+	this.pass = ""
+	this.pNext = 0
+	this.isLoaded = 0
+End Constructor
+
+
+Destructor Account()
+	this.userName = ""
+	this.pass = ""
+	If this.pNext <> 0 Then Delete this.pNext 
+End Destructor
+
+
 Function Account.toRecord() As String
 	Dim As String strRec = this.userName + "\t" + this.pass
 	
@@ -19,12 +34,13 @@ Destructor AccountManager()
 End Destructor
 
 
-Sub AccountManager.loadFromDisk(fileName As String)
+Function AccountManager.loadFromDisk(fileName As String) As Integer
 	Dim As Table Ptr pTable = loadTableFromFile(fileName)
+	Dim As Integer accountNum = 0
 	
 	If pTable = 0 Then
 		Print "Error! Could not load '" +fileName+ "' for account list info"
-		Exit Sub
+		Return 0
 	EndIf
 	
 	Dim As Integer iAccountName = pTable->getColumnID("name")
@@ -37,19 +53,18 @@ Sub AccountManager.loadFromDisk(fileName As String)
 		pTempAcc->userName = pRec->getFieldByID(iAccountName)->value
 		
 		If pRec->getFieldByID(iLoadAccount)->value = "1" Then
-			/' TODO: Load account from disk '/
-			pTempAcc->isLoaded = -1
-			
-		Else
-			pTempAcc->isLoaded = 0
-		EndIf
+			loadSavedAccount(pTempAcc)
+			accountNum += 1
+		End If
 		
 		this.addAccount(pTempAcc)
 		pRec = pRec->pNext
 	Wend
 	
 	Delete pTable
-End Sub
+	
+	Return accountNum
+End Function
 
 
 Sub AccountManager.addAccount(pNewAccount As Account Ptr)
@@ -61,3 +76,17 @@ Sub AccountManager.addAccount(pNewAccount As Account Ptr)
 		this.pAcc = pNewAccount
 	EndIf
 End Sub
+
+
+Function loadSavedAccount(pAcc As Account Ptr) As Integer
+	If pAcc = 0 Then Return 1
+	If pAcc->userName = "" Then Return 2
+	
+	Dim As String baseDir = ACCOUNT_ROOT_DIR + pAcc->userName + "/"
+	
+	/' Load info '/
+	Dim As String infoFileName = baseDir + "info.txt"
+	Dim As Table Ptr pInfoTab = loadTableFromFile(infoFileName)
+	
+	Delete pInfoTab
+End Function
