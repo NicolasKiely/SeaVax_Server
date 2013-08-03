@@ -5,9 +5,25 @@
 #Include Once "FunctionList.bi"
 
 
+/' Description:
+ '  Gets communication protocol version
+ '
+ ' Command name:
+ '  /hs/v
+ '
+ ' Targets:
+ '  Clients
+ '
+ ' Parameters:
+ '  - None
+ '
+ ' Returns:
+ '  Major version number | minor version number
+ '  single line
+ '/
 Sub CMD_getProtocolVersion(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aAccount As Any Ptr, aServer As Any Ptr)
+		aClient As Any Ptr, aServer As Any Ptr)
 	
 	pPipeOut->addToColumn("major")
 	pPipeOut->addToColumn("minor")
@@ -15,9 +31,25 @@ Sub CMD_getProtocolVersion(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 End Sub
 
 
+/' Description:
+ '  Gets server and API version
+ '
+ ' Command name:
+ '  /hs/serv
+ '
+ ' Targets:
+ '  Clients
+ '
+ ' Parameters:
+ '  - None
+ '
+ ' Returns:
+ '  Major version | Minor Version | Release type
+ '  Single Line
+ '/
 Sub CMD_getServerVersion(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aAccount As Any Ptr, aServer As Any Ptr)
+		aClient As Any Ptr, aServer As Any Ptr)
 	
 	pPipeOut->addToColumn("major")
 	pPipeOut->addToColumn("minor")
@@ -26,9 +58,26 @@ Sub CMD_getServerVersion(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 End Sub
 
 
+/' Description:
+ '  Place to credit author contributions and mods
+ '
+ ' Command name:
+ '  /hs/mod
+ '
+ ' Targets:
+ '  Clients
+ '
+ ' Parameters:
+ '  - None
+ '
+ ' Returns:
+ '  Modification | Major version | Minor version | Author name
+ '  Returns as many lines as the sum of the authors contributions
+ '  Modification name is vanilla for contributions to core code
+ '/
 Sub CMD_getModVersion(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aAccount As Any Ptr, aServer As Any Ptr)
+		aClient As Any Ptr, aServer As Any Ptr)
 	
 	pPipeOut->addToColumn("mod")
 	pPipeOut->addToColumn("major")

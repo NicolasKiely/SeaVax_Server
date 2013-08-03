@@ -7,10 +7,19 @@
 #Include Once "Command.bi"
 
 
-/' Parameters:
+/' Description:
+ '  Lists subdirectories in a path
+ '
+ ' Command name:
+ '  /dat/ls
+ '
+ ' Targets:
+ '  Clients
+ '
+ ' Parameters:
  ' -(d)irectory : sub directory to lookup
  '
- ' Output format:
+ ' Returns:
  ' - text (Generic text for user):
  '		Directory/Command name
  '/

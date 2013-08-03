@@ -2,6 +2,7 @@ SeaV4X
 
 TODO list:
 	Command system: Add more commands: Account commands
+	Flags: Loading and pre-checking
 	Next milestone: Account system
 
 

@@ -5,6 +5,25 @@
  ' pPipeIn may be null for unprivledged accounts.
  ' To report errors, add to the error table
  ---------------------------------------------------------------------------'/
+
+/' All commands should be preceeded by a summary comment block '/ 
+/' Description:
+ '  <Description of command>
+ '
+ ' Command name:
+ '  <Full default path name of command>
+ '
+ ' Targets:
+ '  <Default lowest priveledge class needed to run command>
+ '
+ ' Parameters:
+ '  - <(p)arameter>: <description of parameter>
+ '  - ...
+ '
+ ' Returns:
+ '  <Description and format of return data, if any>
+ '/
+
 #Include Once "Command.bi" 
 
 

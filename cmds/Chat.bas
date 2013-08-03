@@ -2,12 +2,21 @@
 #Include Once "../server/Server.bi"
 
 
-/' Command name: /msg/chat
+/' Description:
+ '  Sends chat message to a chat room
+ '
+ ' Command name:
+ '  /msg/chat
+ '
+ ' Target:
+ '  Clients, Players, and Accounts. Dependent on room
+ '
  ' Parameters:
  ' - (r)oom : specific chat room to say
  ' - (m)essage: Message to say
  '
- ' Output: None
+ ' Output:
+ '  None. Chat message broadcasting is done by the chatroom/ChatRoom module
  '/
 Sub CMD_chatMessage(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pPipeErr As Table Ptr, pParam As Param Ptr, _

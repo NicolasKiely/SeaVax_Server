@@ -1,8 +1,6 @@
-NOTE: Prolly disuse
-
-id	name	abbrev	command	minarg	maxarg	info
-1	time	t	4	1	1	Time to wait until shutting down
-2	message	m	4	1	1	Message to broadcast on a given interval. %t subsituted for time remaining
-3	interval	i	4	1	1	Duration of intervals between messages sent
-4	dir	d	5	1	Directory to list
-5	flags	f	5	0	Specify showing flags for the command
+name	letter	command	minarg	maxarg	minUse	maxUse	info
+old	o	/acc/log/setpass	1	1	1	1	Old password of account
+new	n	/acc/log/setpass	1	1	1	1	New passowrd of account
+account	a	/acc/log/login	1	1	1	1	Account to login to
+password	p	/acc/log/login	1	1	1	1	Password for account
+directory	d	/dat/ls	1	1	0	1	Directory to list
