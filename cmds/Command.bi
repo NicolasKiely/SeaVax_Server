@@ -8,7 +8,36 @@
 
 #Define DOMAIN_LIST_FILE "dat/DomainListing.txt"
 #Define COMMAND_LIST_FILE "dat/CommandListing.txt"
+#Define FLAG_LIST_FILE "dat/FlagListing.txt"
 #Define DOMAIN_DELIMITER 47
+
+
+/'----------------------------------------------------------------------------
+ ' List of flags associated with a command
+ ---------------------------------------------------------------------------'/
+Type Flag
+	/' Long name '/
+	Dim As String lName
+	
+	/' Short name '/
+	Dim As String sName
+	
+	/' Minimum and maximum number of arguments per flag. -1 means no limit '/
+	Dim As Integer minArg
+	Dim As Integer maxArg
+	
+	/' Minimum and maximum number of times used per command. -1 means no limit '/
+	Dim As Integer minUse
+	Dim As Integer maxUse
+	
+	/' Associated info text '/
+	Dim As String info
+	
+	Dim As Flag Ptr pNext
+	
+	Declare Constructor()
+	Declare Destructor()
+End Type
 
 
 /'----------------------------------------------------------------------------
@@ -27,8 +56,12 @@ Type Cmd
 	/' ID of command '/
 	Dim As Integer id
 	
+	/' Flag list '/
+	Dim As Flag Ptr pFlag
+	
 	/' Recursive Debug print statement '/
 	Declare Sub DEBUG_PRINT(tabLevel As Integer)
+	
 	
 	/' Bound function to command. For simplicitys sake of dependency
 	 ' resolution, accounts and servers are void pointers.

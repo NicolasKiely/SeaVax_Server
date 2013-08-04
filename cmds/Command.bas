@@ -3,15 +3,42 @@
 #Include Once "../API/FunctionList.bi"
 
 
+Constructor Flag()
+	this.lName = ""
+	this.sName = ""
+	
+	this.minArg = 1
+	this.maxArg = 1
+	
+	this.minUse = 1
+	this.maxUse = 1
+	
+	this.info = "Default flag info"
+	
+	this.pNext = 0
+End Constructor
+
+
+Destructor Flag()
+	this.lName = ""
+	this.sName = ""
+	this.info = ""
+	
+	If this.pNext <> 0 Then Delete this.pNext
+End Destructor
+
+
 Constructor Cmd()
 	this.pNext = 0
 	this.text = ""
 	this.pFunc = 0
+	this.pFlag = 0
 End Constructor
 
 
 Destructor Cmd()
 	If this.pNext <> 0 Then Delete this.pNext
+	If this.pFlag <> 0 Then Delete this.pFlag
 End Destructor
 
 
@@ -477,5 +504,82 @@ Sub loadCommands(fileName As String, pDomain As Domain Ptr)
 	
 	
 	/' Done with table '/
+	Delete t
+End Sub
+
+
+Sub loadFlags(fileName As String, pDomain As domain Ptr)
+	/' Load the flag table from disk '/
+	Dim As Table Ptr t = loadTableFromFile(fileName)
+	
+	/' Load column header ids '/
+	Dim As Integer iName    = t->getColumnID_IC("name")
+	Dim As Integer iLetter  = t->getColumnID_IC("letter")
+	Dim As Integer iCommand = t->getColumnID_IC("command")
+	Dim As Integer iMinArg  = t->getColumnID_IC("minarg")
+	Dim As Integer iMaxArg  = t->getColumnID_IC("maxarg")
+	Dim As Integer iMinUse  = t->getColumnID_IC("minuse")
+	Dim As Integer iMaxUse  = t->getColumnID_IC("maxuse")
+	Dim As Integer iInfo    = t->getColumnID_IC("info")
+	
+	If iName=-1 Or iLetter=-1 Or iCommand=-1 Or iMinArg=-1 Or iMaxArg=-1 Or iMinUse=-1 Or iMaxUse=-1 Or iInfo=-1 Then
+		Print "Error, could not load columns from file "+fileName
+		Delete t
+		Exit Sub
+	EndIf
+	
+	
+	/' Loop through records '/
+	Dim As Record Ptr pRec = t->pRec
+	While pRec <> 0
+		/' Get record fields '/
+		Dim As Fld Ptr pName    = pRec->getFieldByID(iName)
+		Dim As Fld Ptr pLetter  = pRec->getFieldByID(iLetter)
+		Dim As Fld Ptr pCommand = pRec->getFieldByID(iCommand)
+		Dim As Fld Ptr pMinArg  = pRec->getFieldByID(iMinArg)
+		Dim As Fld Ptr pMaxArg  = pRec->getFieldByID(iMaxArg)
+		Dim As Fld Ptr pMinUse  = pRec->getFieldByID(iMinUse)
+		Dim As Fld Ptr pMaxUse  = pRec->getFieldByID(iMaxUse)
+		Dim As Fld Ptr pInfo    = pRec->getFieldByID(iInfo)
+		
+		If pName=-1 Or pLetter=-1 Or pCommand=-1 Or pMinArg=-1 Or pMaxArg=-1 Or pMinUse=-1 Or pMaxUse=-1 Or pInfo=-1 Then
+			Print "Incomplete flag field"
+			pRec = pRec->pNext
+			Continue While
+		EndIf
+		
+		/' Lookup command to bind flags '/
+		Dim As Cmd Ptr pCmd = lookupCmd(pCommand->value, pDomain)
+		
+		If pCmd = 0 Then
+			Print "Could not look up command '" +pCommand->value+ "' for flag '" +pName->value+ "'"
+			pRec = pRec->pNext
+			Continue While
+		EndIf
+		
+		
+		/' Create new flag structure '/
+		Dim As Flag Ptr pFlag = New Flag()
+		pFlag->lName = pName->value
+		pFlag->sName = pLetter->value
+		pFlag->minArg = ValInt(pMinArg->value)
+		pFlag->maxArg = ValInt(pMaxArg->value)
+		pFlag->minUse = ValInt(pMinUse->value)
+		pFlag->maxUse = ValInt(pMaxUse->value)
+		pFlag->info = pInfo->value
+		
+		/' Bind flag to command '/
+		If pCmd->pFlag = 0 Then
+			pCmd->pFlag = pFlag
+			
+		Else
+			pFlag->pNext = pCmd->pFlag
+			pCmd->pFlag = pFlag
+		EndIf
+		
+		
+		pRec = pRec->pNext
+	Wend
+	
 	Delete t
 End Sub

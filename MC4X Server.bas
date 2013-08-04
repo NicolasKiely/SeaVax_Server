@@ -103,6 +103,8 @@ Else
 	Print "Domains loaded!"
 	Print "Loading commands ..."
 	loadCommands(COMMAND_LIST_FILE, serv.pRootCmd)
+	Print "Loading flags ..."
+	loadFlags(FLAG_LIST_FILE, serv.pRootCmd)
 	serv.pRootCmd->DEBUG_PRINT(1)
 EndIf
 
