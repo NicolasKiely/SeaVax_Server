@@ -6,6 +6,17 @@
  ' To report errors, add to the error table
  ---------------------------------------------------------------------------'/
 
+/' Steps to add a new command: (this system needs to be made better)
+ ' In this file:
+ '  - Add DECLARE_CMD_SUB(functionName) line 
+ '  - Add @CMD_functionName to CMD_BINDING_ARRAY
+ '  - Update CMD_BINDING_ARRAY upper limit to include command
+ ' In dat folder
+ '  - update command, domain, and flag listings
+ '  - verify indexs match
+ '/
+
+
 /' All commands should be preceeded by a summary comment block '/ 
 /' Description:
  '  <Description of command>
@@ -24,7 +35,7 @@
  '  <Description and format of return data, if any>
  '/
 
-#Include Once "Command.bi" 
+#Include Once "../cmds/Command.bi" 
 
 
 /' For properly defining the subroutines to bind to commands '/

@@ -4,7 +4,7 @@
 
 #Include Once "FunctionList.bi"
 #Include Once "../server/Server.bi"
-#Include Once "Command.bi"
+#Include Once "../cmds/Command.bi"
 
 
 /' Description:

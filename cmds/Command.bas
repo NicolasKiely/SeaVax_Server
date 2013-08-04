@@ -1,6 +1,6 @@
 #Include Once "Command.bi"
 #Include Once "table/Table.bi"
-#Include Once "FunctionList.bi"
+#Include Once "../API/FunctionList.bi"
 
 
 Constructor Cmd()
