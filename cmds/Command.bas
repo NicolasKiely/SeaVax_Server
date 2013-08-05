@@ -396,11 +396,108 @@ Sub Cmd.DEBUG_PRINT(tabLevel As Integer)
 End Sub
 
 
-Sub cmd.callFunc(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
+Function Flag.findFlag(flagName As String) As Flag Ptr
+	If flagName = this.lName OrElse flagName = this.sName Then
+		/' Match found '/
+		Return @This
+		
+	Else
+		If this.pNext <> 0 Then
+			/' No match found yet, search further into list '/
+			Return this.pNext->findFlag(flagName)
+			
+		Else
+			/' End of list, no match found '/
+			Return 0
+		EndIf
+	EndIf
+End Function
+
+
+Sub Flag.clearTempData()
+	this.tempArg = 0
+	this.tempUse = 0
+	
+	If this.pNext <> 0 Then this.pNext->clearTempData()
+End Sub
+
+
+Sub Cmd.callFunc(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 			pPipeErr As Table Ptr, pParam As Param Ptr, _
 			aAccount As Any Ptr, aServer As Any Ptr)
 	
 	If this.pFunc <> 0 Then
+		Dim As Record Ptr pLineErr = 0
+		If this.pFlag <> 0 Then this.pFlag->clearTempData()
+		
+		/' Check each parameter '/
+		Dim As Param Ptr pPar = pParam->pNext
+		Dim As Flag Ptr pTempFlag
+		While pPar <> 0
+			/' Find flag for this parameter'/
+			pTempFlag = 0
+			If this.pFlag <> 0 Then pTempFlag = this.pFlag->findFlag(pPar->text)
+			
+			/' Makes sure parameter matches flag '/
+			If pTempFlag = 0 Then
+				pLineErr = New Record()
+				pLineErr->addField("Cmd "+this.text)
+				pLineErr->addField("Undefined parameter found")
+				pLineErr->addField(pPar->text)
+				pPipeErr->addRecord(pLineErr)
+				Exit Sub
+			EndIf
+			
+			/' Increment use count and find arg count '/
+			pTempFlag->tempUse += 1
+			pTempFlag->tempArg = pPar->valCount
+			
+			/' Check val count against specs '/
+			If pTempFlag->tempArg < pTempFlag->minArg Then
+				pLineErr = New Record()
+				pLineErr->addField("Cmd "+this.text)
+				pLineErr->addField("Too few values for parameter ("+Str(pTempFlag->minArg)+")")
+				pLineErr->addField(pPar->text+" ("+Str(pTempFlag->tempArg)+")")
+				pPipeErr->addRecord(pLineErr)
+				Exit Sub
+			EndIf
+			If pTempFlag->tempArg > pTempFlag->maxArg And pTempFlag->maxArg<>-1 Then
+				pLineErr = New Record()
+				pLineErr->addField("Cmd "+this.text)
+				pLineErr->addField("Too many values for parameter ("+Str(pTempFlag->maxArg)+")")
+				pLineErr->addField(pPar->text+" ("+Str(pTempFlag->tempArg)+")")
+				pPipeErr->addRecord(pLineErr)
+				Exit Sub
+			EndIf
+			
+			pPar = pPar->pNext
+		Wend
+		
+		/' Check flags for proper use count '/
+		pTempFlag = this.pFlag
+		While pTempFlag <> 0
+			If pTempFlag->tempUse < pTempFlag->minUse Then
+				pLineErr = New Record()
+				pLineErr->addField("Cmd "+this.text)
+				pLineErr->addField("Too few uses of parameter ("+Str(pTempFlag->minUse)+")")
+				pLineErr->addField(pTempFlag->lName+" ("+Str(pTempFlag->tempUse)+")")
+				pPipeErr->addRecord(pLineErr)
+				Exit Sub
+			EndIf
+			If pTempFlag->tempUse > pTempFlag->maxUse And pTempFlag->maxUse<>-1 Then
+				pLineErr = New Record()
+				pLineErr->addField("Cmd "+this.text)
+				pLineErr->addField("Too many uses of parameter ("+Str(pTempFlag->maxUse)+")")
+				pLineErr->addField(pTempFlag->lName+" ("+Str(pTempFlag->tempUse)+")")
+				pPipeErr->addRecord(pLineErr)
+				Exit Sub
+			EndIf
+			
+			pTempFlag = pTempFlag->pNext
+		Wend
+		
+		
+		/' Call function if no error raised '/
 		this.pFunc(pPipeIn, pPipeOut, pPipeErr, pParam, aAccount, aServer)
 	EndIf
 End Sub

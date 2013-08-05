@@ -33,10 +33,20 @@ Type Flag
 	/' Associated info text '/
 	Dim As String info
 	
+	/' Temporary variables for counting '/
+	Dim As Integer tempArg
+	Dim As Integer tempUse
+	
 	Dim As Flag Ptr pNext
 	
 	Declare Constructor()
 	Declare Destructor()
+	
+	/' Looks up flag by name '/
+	Declare Function findFlag(flagName As String) As Flag Ptr
+	
+	/' Resets temporary variables of list '/
+	Declare Sub clearTempData()
 End Type
 
 
@@ -76,7 +86,7 @@ Type Cmd
 			pPipeErr As Table Ptr, pParam As Param Ptr, _
 			aAccount As Any Ptr, aServer As Any Ptr)
 	
-	/' Calls pFunc if not-null '/
+	/' Calls pFunc if not-null and parameters fit flag specs '/
 	Declare Sub callFunc(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 			pPipeErr As Table Ptr, pParam As Param Ptr, _
 			aAccount As Any Ptr, aServer As Any Ptr)
