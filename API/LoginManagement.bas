@@ -40,37 +40,12 @@ Sub CMD_clientLogin(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 	Dim As Param Ptr prmAcc = pParam->popParam("account", "a")
 	Dim As Param Ptr prmPass = pParam->popParam("password", "p")
 	
-	If pParam->pNext <> 0 Then
-		pLineErr = New Record()
-		pLineErr->addField("CmdClientLogin")
-		pLineErr->addField("Undefined parameter found")
-		pLineErr->addField(pParam->pNext->text)
-		pPipeErr->addRecord(pLineErr)
-	EndIf
-	
 	/' Lookup account name '/
 	Dim As Account Ptr pAcc
 	Dim As String accName
-	If prmAcc <> 0 Then
-		If prmAcc->pVals <> 0 Then
-			accName = prmAcc->pVals->text
-			pAcc = pServer->accMan.lookupAccount(accName)
-			
-		Else
-			pLineErr = New Record()
-			pLineErr->addField("CmdClientLogin")
-			pLineErr->addField("Account parameter needs name")
-			pLineErr->addField("Use -account 'your account name'")
-			pPipeErr->addRecord(pLineErr)
-		EndIf
-		
-	Else
-		pLineErr = New Record()
-		pLineErr->addField("CmdClientLogin")
-		pLineErr->addField("Account not specified")
-		pLineErr->addField("Use -account 'your account name'")
-		pPipeErr->addRecord(pLineErr)
-	EndIf
+	
+	accName = prmAcc->pVals->text
+	pAcc = pServer->accMan.lookupAccount(accName)
 	
 	
 	If pAcc = 0 Then
@@ -87,43 +62,26 @@ Sub CMD_clientLogin(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 	EndIf
 	
 	/' Lookup password '/
-	If prmPass <> 0 Then
-		If prmPass->pVals <> 0 Then
-			If pAcc->pass = prmPass->pVals->text Then
-				/' Password match, log in to account '/
-				pClient->pAcc = pAcc
-				
-				/' Load account from disk if not already done '/
-				loadSavedAccount(pAcc)
-				
-				/' Output account logged in as '/
-				pPipeOut->addToHeader("Login")
-				pPipeOut->addToColumn("Name")
-				pPipeOut->addRecord(loadRecordFromString(accName))
-				
-			Else
-				pLineErr = New Record()
-				pLineErr->addField("CmdClientLogin")
-				pLineErr->addField("Invalid password")
-				pLineErr->addField("Wrong password entered")
-				pPipeErr->addRecord(pLineErr)
-			EndIf
-			
-		Else
-			pLineErr = New Record()
-			pLineErr->addField("CmdClientLogin")
-			pLineErr->addField("Password parameter needs name")
-			pLineErr->addField("Use -password 'your password'")
-			pPipeErr->addRecord(pLineErr)
-		EndIf
+	If pAcc->pass = prmPass->pVals->text Then
+		/' Password match, log in to account '/
+		pClient->pAcc = pAcc
+		
+		/' Load account from disk if not already done '/
+		loadSavedAccount(pAcc)
+		
+		/' Output account logged in as '/
+		pPipeOut->addToHeader("Login")
+		pPipeOut->addToColumn("Name")
+		pPipeOut->addRecord(loadRecordFromString(accName))
 		
 	Else
 		pLineErr = New Record()
 		pLineErr->addField("CmdClientLogin")
-		pLineErr->addField("Password not specified")
-		pLineErr->addField("Use -password 'your password'")
+		pLineErr->addField("Invalid password")
+		pLineErr->addField("Wrong password entered")
 		pPipeErr->addRecord(pLineErr)
 	EndIf
+
 	
 	
 	If prmAcc <> 0 Then Delete prmAcc
@@ -172,38 +130,13 @@ Sub CMD_clientChangePassword(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 	Dim As Param Ptr prmOld = pParam->popParam("old", "o")
 	Dim As Param Ptr prmNew = pParam->popParam("new", "n")
 	
-	If pParam->pNext <> 0 Then
-		pLineErr = New Record()
-		pLineErr->addField("CmdClientLogin")
-		pLineErr->addField("Undefined parameter found")
-		pLineErr->addField(pParam->pNext->text)
-		pPipeErr->addRecord(pLineErr)
-	EndIf
-	
 	/' Lookup old password '/
 	Dim As String oldPass
-	If prmOld <> 0 Then
-		If prmOld->pVals <> 0 Then
-			/' Invalidate password if no match found '/
-			oldPass = prmOld->pVals->text
-			If oldPass <> pAcc->pass Then oldPass = ""
-			
-		Else
-			pLineErr = New Record()
-			pLineErr->addField("CmdClientChangePassword")
-			pLineErr->addField("Password parameter needs name")
-			pLineErr->addField("Use -old 'your current password'")
-			pPipeErr->addRecord(pLineErr)
-		EndIf
-		
-	Else
-		pLineErr = New Record()
-		pLineErr->addField("CmdClientChangePassword")
-		pLineErr->addField("Old password not specified")
-		pLineErr->addField("Use -old 'your current password'")
-		pPipeErr->addRecord(pLineErr)
-	EndIf
 	
+	/' Invalidate password if no match found '/
+	oldPass = prmOld->pVals->text
+	If oldPass <> pAcc->pass Then oldPass = ""
+
 	/' Checkpoint: validate that old password was gathered '/
 	If oldPass = "" Then
 		pLineErr = New Record()
@@ -217,29 +150,8 @@ Sub CMD_clientChangePassword(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		Exit Sub
 	EndIf
 	
-	
-	/' Lookup new password '/
-	If prmNew <> 0 Then
-		If prmNew->pVals <> 0 Then
-			/' Set password '/
-			pAcc->pass = prmOld->pVals->text
-			
-		Else
-			pLineErr = New Record()
-			pLineErr->addField("CmdClientChangePassword")
-			pLineErr->addField("Password parameter needs name")
-			pLineErr->addField("Use -new 'your new password'")
-			pPipeErr->addRecord(pLineErr)
-		EndIf
-		
-	Else
-		pLineErr = New Record()
-		pLineErr->addField("CmdClientChangePassword")
-		pLineErr->addField("New password not specified")
-		pLineErr->addField("Use -new 'your new password'")
-		pPipeErr->addRecord(pLineErr)
-	EndIf
-	
+	/' Set password '/
+	pAcc->pass = prmOld->pVals->text
 	
 	If prmOld <> 0 Then Delete prmOld
 	If prmNew <> 0 Then Delete prmNew

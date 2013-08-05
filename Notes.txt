@@ -2,7 +2,6 @@ SeaV4X
 
 TODO list:
 	Command system: Add more commands: Account commands
-	-Flags: Command parameter pre-checking. Removing boilerplate code in network api commands
 	Next milestone: Account system
 
 

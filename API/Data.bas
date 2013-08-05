@@ -38,14 +38,6 @@ Sub CMD_ListDirectory(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 	/' Pop parameters '/
 	Dim As Param Ptr prmDir = pParam->popParam("directory", "d")
 	
-	If pParam->pNext <> 0 Then
-		pLineErr = New Record()
-		pLineErr->addField("CmdListDirectory")
-		pLineErr->addField("Undefined parameter found")
-		pLineErr->addField(pParam->pNext->text)
-		pPipeErr->addRecord(pLineErr)
-	EndIf
-	
 	Dim As Domain Ptr pD = 0
 	Dim As Domain Ptr pSubD = 0
 	Dim As Cmd Ptr pC = 0
@@ -55,20 +47,9 @@ Sub CMD_ListDirectory(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pD = pServer->pRootCmd
 		
 	Else
-		/' List sub directories '/
-		If prmDir->pVals = 0 Then
-			pLineErr = New Record()
-			pLineErr->addField("CMD_ListDirectory")
-			pLineErr->addField("Expected value after parameter")
-			pLineErr->addField(prmDir->text)
-			
-			pPipeErr->addRecord(pLineErr)
-			
-		Else
-			/' use parameter '/
-			dirName = prmDir->pVals->text
-			pD = lookupDomain(dirName, pServer->pRootCmd)
-		EndIf
+		/' List sub directories using parameter '/
+		dirName = prmDir->pVals->text
+		pD = lookupDomain(dirName, pServer->pRootCmd)
 		
 		Delete prmDir
 	EndIf
