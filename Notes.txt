@@ -2,10 +2,7 @@ SeaV4X
 
 TODO list:
 	Command system:
-		Account commands
-			account log out
 		Command spec command
-			Lookup command info
 			Lookup command flags
 		permissions
 	Next milestone: Account+permission system, then back to client side

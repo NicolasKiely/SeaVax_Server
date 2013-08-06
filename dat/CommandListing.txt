@@ -11,3 +11,5 @@ id	name	domain	info
 10	create	/acc/man	Creates an account
 11	ls	/acc/log	Lists accounts of server
 12	logout	/acc/log	Logs out of account
+13	info	/dat	Lists info of a directory or command
+14	lsf	/dat	Lists flag info of a command

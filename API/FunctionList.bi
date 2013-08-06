@@ -49,13 +49,13 @@
 
 /' Builds the array of commands for binding '/
 #Macro BUILD_CMD_ARRAY_MACRO()
-	Dim CMD_BINDING_ARRAY(1 To 12) As Sub(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
+	Dim CMD_BINDING_ARRAY(1 To 14) As Sub(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pPipeErr As Table Ptr, pParam As Param Ptr, _
 		aClient As Any Ptr, aServer As Any Ptr) _
 		= _
 		{@CMD_getProtocolVersion, @CMD_getServerVersion, @CMD_getModVersion, @CMD_stopServer, @CMD_listDirectory, _
 		@CMD_tableColumns, @CMD_chatMessage, @CMD_clientLogin, @CMD_clientChangePassword, @CMD_manCreateAccount, _
-		@CMD_listAccounts, @CMD_clientLogout}
+		@CMD_listAccounts, @CMD_clientLogout, @CMD_directoryInfo, @CMD_flagInfo}
 #EndMacro
 
 
@@ -72,3 +72,5 @@ DECLARE_CMD_SUB(clientChangePassword)		'  9
 DECLARE_CMD_SUB(manCreateAccount)         ' 10
 DECLARE_CMD_SUB(listAccounts)             ' 11
 DECLARE_CMD_SUB(clientLogout)             ' 12
+DECLARE_CMD_SUB(directoryInfo)            ' 13
+DECLARE_CMD_SUB(flagInfo)                 ' 14
