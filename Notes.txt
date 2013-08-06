@@ -8,8 +8,7 @@ TODO list:
 			Lookup command info
 			Lookup command flags
 		permissions
-		return success/acknowledge packet if no error table and output table empty
-	Next milestone: Account system
+	Next milestone: Account+permission system, then back to client side
 
 
 Pie-in-Sky List:

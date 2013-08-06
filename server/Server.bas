@@ -329,9 +329,10 @@ Sub Server.handleClientInput(pTalker As Client Ptr, zDatIn As ZString Ptr, datLe
 		Select Case As Const pTemp->strType
 			Case CommandStreamStrings.COMMAND_STRING:
 				Dim As String pars = ""
+				Dim As String cmdName = pTemp->text
 				
 				/' Execute command '/
-				pCmd = lookupCmd(pTemp->text, this.pRootCmd)
+				pCmd = lookupCmd(cmdName, this.pRootCmd)
 				
 				/' Check for parameters '/
 				If pTemp->pNext <> 0 Then
@@ -365,6 +366,12 @@ Sub Server.handleClientInput(pTalker As Client Ptr, zDatIn As ZString Ptr, datLe
 						pErrLine = loadRecordFromString(!"Server.handleClientInput\tError in command")
 						pPipeErr->addRecord(pErrLine)
 						Exit While
+						
+					ElseIf pPipeOut->pCol=0 And pPipeOut->pRec=0 Then
+						/' No error found and empty table returned, send ACK back '/
+						pPipeOut->addToColumn("ACK")
+						pPipeOut->addRecord(loadRecordFromString(cmdName))
+						
 					EndIf
 					
 				Else
