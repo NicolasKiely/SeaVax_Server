@@ -18,6 +18,9 @@ Type Account
 	/' Whether or not account is pre-loaded '/
 	Dim As Integer isLoaded
 	
+	/' Whether or not a client has logged in to account '/
+	Dim As Integer isLoggedIn
+	
 	/' First time account is saved. 0 returned on success '/
 	Declare Function firstSave() As Integer
 	

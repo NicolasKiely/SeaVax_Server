@@ -37,6 +37,10 @@ Sub client.freeSelf()
 		Delete this.pNetBuf
 		this.pNetBuf = 0
 	EndIf
+	
+	If this.pAcc <> 0 Then
+		this.pAcc->isLoggedIn = 0
+	EndIf
 End Sub
 
 

@@ -63,11 +63,17 @@ Sub CMD_clientLogin(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 	
 	/' Lookup password '/
 	If pAcc->pass = prmPass->pVals->text Then
+		/' Update login state for old account '/
+		If pClient->pAcc <> 0 Then pClient->pAcc->isLoggedIn = 0
+		
 		/' Password match, log in to account '/
 		pClient->pAcc = pAcc
 		
 		/' Load account from disk if not already done '/
 		loadSavedAccount(pAcc)
+		
+		/' Update login state for new account'/
+		pAcc->isLoggedIn = -1
 		
 		/' Output account logged in as '/
 		pPipeOut->addToHeader("Login")
@@ -219,4 +225,97 @@ Sub CMD_manCreateAccount(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 	
 	If prmAcc <> 0 Then Delete prmAcc
 	If prmPass <> 0 Then Delete prmPass
+End Sub
+
+
+/' Description:
+ '  Lists accounts
+ '
+ ' Command name:
+ '  /acc/log/ls
+ '
+ ' Targets:
+ '  Accounts
+ '
+ ' Parameters:
+ ' - None
+ '
+ ' Returns:
+ '  Account name
+ '/
+Sub CMD_listAccounts(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
+		pPipeErr As Table Ptr, pParam As Param Ptr, _
+		aClient As Any Ptr, aServer As Any Ptr)
+	
+	Dim As Server Ptr pServer = CPtr(Server Ptr, aServer)
+	
+	/' Set up table '/
+	pPipeOut->addToColumn("account")
+	pPipeOut->addToColumn("logged")
+	
+	/' Loop through accounts '/
+	Dim As Account Ptr pAcc = pServer->accMan.pAcc
+	While pAcc <> 0
+		/' Generate record for account '/
+		Dim As Record Ptr pRec = New Record()
+		pRec->addField(pAcc->userName)
+		If pAcc->isLoggedIn = 0 Then
+			pRec->addField("0")
+		Else
+			pRec->addField("1")
+		EndIf
+		
+		/' Add to results '/
+		pPipeOut->addRecord(pRec)
+		
+		pAcc = pAcc->pNext
+	Wend
+End Sub
+
+
+/' Description:
+ '  Logs client out of account
+ '
+ ' Command name:
+ '  /acc/log/logout
+ '
+ ' Targets:
+ '  Clients
+ '
+ ' Parameters:
+ ' - None
+ '
+ ' Returns:
+ '  Nothing
+ '/
+Sub CMD_clientLogout(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
+		pPipeErr As Table Ptr, pParam As Param Ptr, _
+		aClient As Any Ptr, aServer As Any Ptr)
+		
+	Dim As Server Ptr pServer = CPtr(Server Ptr, aServer)
+	Dim As Client Ptr pClient = CPtr(Client Ptr, aClient)
+	Dim As Record Ptr pLineErr = 0
+	
+	If pClient = 0 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdClientLogout")
+		pLineErr->addField("No client attached")
+		pLineErr->addField("pClient == 0")
+		pPipeErr->addRecord(pLineErr)
+		
+		Exit Sub
+	EndIf
+	
+	If pClient->pAcc <> 0 Then
+		/' Log out '/
+		pClient->pAcc->isLoggedIn = 0
+		pClient->pAcc = 0
+		
+	Else
+		pLineErr = New Record()
+		pLineErr->addField("CmdClientLogout")
+		pLineErr->addField("Not logged in to any account")
+		pLineErr->addField("pClient->pAcc == 0")
+		pPipeErr->addRecord(pLineErr)
+	EndIf
 End Sub

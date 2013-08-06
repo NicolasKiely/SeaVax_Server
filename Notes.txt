@@ -3,7 +3,7 @@ SeaV4X
 TODO list:
 	Command system:
 		Account commands
-			lookup list of accounts
+			account log out
 		Command spec command
 			Lookup command info
 			Lookup command flags

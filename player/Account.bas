@@ -7,6 +7,7 @@ Constructor Account()
 	this.pass = ""
 	this.pNext = 0
 	this.isLoaded = 0
+	this.isLoggedIn = 0
 End Constructor
 
 

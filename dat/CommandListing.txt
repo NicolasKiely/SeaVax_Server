@@ -9,3 +9,5 @@ id	name	domain	info
 8	login	/acc/log	Attempt to log in to an account
 9	setpass	/acc/log	Changes account password
 10	create	/acc/man	Creates an account
+11	ls	/acc/log	Lists accounts of server
+12	logout	/acc/log	Logs out of account
