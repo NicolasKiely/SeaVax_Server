@@ -18,6 +18,12 @@ Type Account
 	/' Whether or not account is pre-loaded '/
 	Dim As Integer isLoaded
 	
+	/' First time account is saved. 0 returned on success '/
+	Declare Function firstSave() As Integer
+	
+	/' Saves account to disk. 0 returned on success '/
+	Declare Function save() As Integer
+	
 	/' Returns string representation of account '/
 	Declare Function toRecord() As String
 	
@@ -39,6 +45,8 @@ Type AccountManager
 	/' Looks up an account by name '/
 	Declare Function lookupAccount(accName As String) As Account Ptr
 	
+	/' Saves all accounts '/
+	Declare Sub save()
 	
 	Declare Constructor()
 	Declare Destructor()

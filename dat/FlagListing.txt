@@ -4,3 +4,5 @@ new	n	/acc/log/setpass	1	1	1	1	New passowrd of account
 account	a	/acc/log/login	1	1	1	1	Account to login to
 password	p	/acc/log/login	1	1	1	1	Password for account
 directory	d	/dat/ls	1	1	0	1	Directory to list
+account	a	/acc/man/create	1	1	1	1	Name of account to create
+password	p	/acc/man/create	1	1	1	1	Password for new account

@@ -128,6 +128,7 @@ Print "Running server's main()"
 serv.serverMain()
 
 
+serv.accMan.save()
 serv.cleanSock()
 
 

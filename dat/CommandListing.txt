@@ -8,3 +8,4 @@ id	name	domain	info
 7	msg	/chat	Sends a chat message
 8	login	/acc/log	Attempt to log in to an account
 9	setpass	/acc/log	Changes account password
+10	create	/acc/man	Creates an account

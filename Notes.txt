@@ -1,7 +1,14 @@
 SeaV4X
 
 TODO list:
-	Command system: Add more commands: Account commands
+	Command system:
+		Account commands
+			lookup list of accounts
+		Command spec command
+			Lookup command info
+			Lookup command flags
+		permissions
+		return success/acknowledge packet if no error table and output table empty
 	Next milestone: Account system
 
 

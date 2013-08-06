@@ -156,3 +156,67 @@ Sub CMD_clientChangePassword(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 	If prmOld <> 0 Then Delete prmOld
 	If prmNew <> 0 Then Delete prmNew
 End Sub
+
+
+/' Description:
+ '  Creates new account
+ '
+ ' Command name:
+ '  /acc/man/create
+ '
+ ' Targets:
+ '  Admin
+ '
+ ' Parameters:
+ ' - (a)ccount : account name
+ ' - (p)assword: password for account
+ '
+ ' Returns:
+ '  Account name
+ '/
+Sub CMD_manCreateAccount(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
+		pPipeErr As Table Ptr, pParam As Param Ptr, _
+		aClient As Any Ptr, aServer As Any Ptr)
+	
+	Dim As Server Ptr pServer = CPtr(Server Ptr, aServer)
+	Dim As Client Ptr pClient = CPtr(Client Ptr, aClient)
+	Dim As Record Ptr pLineErr = 0
+	
+	/' Pop parameters '/
+	Dim As Param Ptr prmAcc = pParam->popParam("account", "a")
+	Dim As Param Ptr prmPass = pParam->popParam("password", "p")
+	
+	/' Check to see if account already exists '/
+	Dim As Account Ptr pAcc = pServer->accMan.lookupAccount(prmAcc->pVals->text)
+	If pAcc <> 0 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdManCreateClient")
+		pLineErr->addField("Attempted to create existing account")
+		pLineErr->addField(prmAcc->pVals->text)
+		pPipeErr->addRecord(pLineErr)
+		
+		If prmAcc <> 0 Then Delete prmAcc
+		If prmPass <> 0 Then Delete prmPass
+		Exit Sub
+	EndIf
+	
+	/' Create new account '/
+	pAcc = New Account()
+	pAcc->userName = prmAcc->pVals->text
+	pAcc->pass = prmPass->pVals->text
+	
+	If pAcc->firstSave() = 0 Then
+		pServer->accMan.addAccount(pAcc)
+		
+	Else
+		pLineErr = New Record()
+		pLineErr->addField("CmdManCreateClient")
+		pLineErr->addField("Could not create new account")
+		pLineErr->addField(prmAcc->pVals->text)
+		pPipeErr->addRecord(pLineErr)
+	EndIf
+	
+	
+	If prmAcc <> 0 Then Delete prmAcc
+	If prmPass <> 0 Then Delete prmPass
+End Sub
