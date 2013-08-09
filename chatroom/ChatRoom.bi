@@ -11,6 +11,8 @@ Type ChatRoom
 	Dim As ChatMsg Ptr pFirst
 	Dim As ChatMsg Ptr pLast
 	
+	Dim As String roomName
+	
 	/' Adds message to list '/
 	Declare Sub addMsg(newAuthor As String, newMsg As String)
 	

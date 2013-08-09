@@ -4,6 +4,7 @@
 Constructor ChatRoom()
 	this.pFirst = 0
 	this.pLast = 0
+	this.roomName = ""
 End Constructor
 
 
@@ -36,6 +37,7 @@ Function ChatRoom.writeToTable() As Table Ptr
 	
 	/' Set up header '/
 	pTable->addToHeader("chat")
+	pTable->addToHeader(this.roomName)
 	pTable->addToColumn("author")
 	pTable->addToColumn("message")
 	

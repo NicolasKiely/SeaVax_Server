@@ -10,6 +10,7 @@
 
 Constructor Server()
 	this.pClient = 0
+	this.lobby.roomName = "lobby"
 End Constructor
 
 
