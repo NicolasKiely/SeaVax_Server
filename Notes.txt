@@ -1,11 +1,8 @@
 SeaV4X
 
 TODO list:
-	Command system:
-		Command spec command
-			Lookup command flags
 		permissions
-	Next milestone: Account+permission system, then back to client side
+	Next milestone: permission system
 
 
 Pie-in-Sky List:

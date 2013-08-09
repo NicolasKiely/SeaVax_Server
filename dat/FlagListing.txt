@@ -8,3 +8,5 @@ account	a	/acc/man/create	1	1	1	1	Name of account to create
 password	p	/acc/man/create	1	1	1	1	Password for new account
 directory	d	/dat/info	1	1	1	1	Directory/command path
 directory	d	/dat/lsf	1	1	1	1	Command of flags
+room	r	/chat/msg	1	1	1	1	Chat room for message
+message	m	/chat/msg	1	1	1	1	Message to say
