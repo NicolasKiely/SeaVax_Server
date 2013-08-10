@@ -16,7 +16,7 @@ End Destructor
 
 Function Fld.rToString() As String
 	If this.pNext <> 0 Then
-		Return this.value + Chr(9) + this.pNext->rToString()
+		Return this.value + CHR_FIELD_DELIMITER + this.pNext->rToString()
 	Else
 		Return this.value
 	EndIf
@@ -289,32 +289,32 @@ End Function
 Function Table.toString() As String
 	Dim As String tabStr = ""
 	Dim As Record Ptr pTemp
-	Dim As String d = Chr(10)' + Chr(13)
 	
 	/' Header '/
 	If this.pHeader <> 0 Then
 		tabStr = pHeader->rToString()
 	EndIf
-	tabStr += d
+	tabStr += CHR_TABLE_DELIMITER
 	
 	/' Columns '/
 	If this.pCol <> 0 Then
 		tabStr += pCol->rToString()
 	EndIf
-	tabStr += d
+	tabStr += CHR_TABLE_DELIMITER
 	
 	/' Records '/
 	pTemp = this.pRec
-	
 	While pTemp <> 0
 		tabStr += pTemp->pFld->rToString()
 		
 		If pTemp->pNext <> 0 Then
-			tabStr += d
+			/' Append extra field delimiter between records '/
+			tabStr += CHR_FIELD_DELIMITER
 		EndIf
 		
 		pTemp = pTemp->pNext
 	Wend
+	tabStr += CHR_TABLE_DELIMITER
 
 	Return tabStr
 End Function

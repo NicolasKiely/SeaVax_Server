@@ -4,6 +4,30 @@
  ' here are added to the end of the list, not front
  ---------------------------------------------------------------------------'/
 
+/' ---------------------------------------------------------------------------
+ ' String/Packet format:
+ '  Header item  \t Header item  \t . . .  Header item \n
+ '  Column name  \t Column name  \t . . .  Column name \n
+ '  Record field \t Record field \t . . . Record field \t
+ '  Record field \t Record field \t . . . Record field \t
+ '  . . .
+ '  Record field \t Record field \t . . . Record field \n
+ '
+ ' 3 packet chunks, all capped with a newline. Next table starts after last newline
+ ' First packet chunk: Header
+ '   List of tab-separated fields containing metadata for table. N total fields
+ ' Second packet chunk: Columns
+ '   Column names for records. List of tab-separated fields. M total fields
+ ' Third Packet chunk: Records
+ '   Row-major list of tab-separated fields of L records. L*M total fields
+ ---------------------------------------------------------------------------'/
+
+/' Newline '/
+#Define ASC_TABLE_DELIMITER 10
+#Define CHR_TABLE_DELIMITER (Chr(ASC_TABLE_DELIMITER))
+/' Tab '/
+#Define ASC_FIELD_DELIMITER 9
+#Define CHR_FIELD_DELIMITER (Chr(ASC_FIELD_DELIMITER))
 
 /' Field in a record '/
 Type Fld
