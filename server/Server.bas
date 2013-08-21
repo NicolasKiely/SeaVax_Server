@@ -170,16 +170,6 @@ Sub Server.handleReadSocks(pReadSet As fd_set Ptr)
 		
 		If WSAGetLastError <> 0 Then safeToAdd = 0
 		
-		/' DEBUG: Send message back '/
-		Dim As ZString * 18 debMsg => "Hello from server"
-		If send(pNewClient->sock, debMsg, 17, 0)=-1 Then
-			Print "Error: send"
-			Print WSAGetLastError - WSABASEERR
-			safeToAdd = 0
-		Else
-			Print "Send message"
-		EndIf
-		
 		/' Dont accept if getting ready to kick, theres a bug where dropped
 		   clients have a ghost structure that reconnects and blocks the recv
 		   call.'/
