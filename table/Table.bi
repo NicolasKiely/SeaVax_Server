@@ -38,7 +38,7 @@ Type Fld
 	Dim As Fld Ptr pNext
 	
 	/' Recursively builds a string out of the field linked list '/
-	Declare Function rToString() As String
+	Declare Function rToString(fldDel As String = CHR_TABLE_DELIMITER) As String
 	
 	Declare Constructor()
 	Declare Destructor()

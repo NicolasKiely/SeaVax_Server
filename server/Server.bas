@@ -205,7 +205,6 @@ Sub Server.handleReadSocks(pReadSet As fd_set Ptr)
 				pBuf[datLen] = 0
 				'Print "Message from client: '" + *pBuf + "'"
 				handleClientInput(pCurrent, pBuf, datLen)
-				If LCase(*pBuf) = "close" Then this.shutdown = -1
 			EndIf
 			
 		Else

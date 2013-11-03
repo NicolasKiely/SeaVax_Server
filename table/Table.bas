@@ -14,9 +14,9 @@ Destructor Fld()
 End Destructor
 
 
-Function Fld.rToString() As String
+Function Fld.rToString(fldDel As String = CHR_TABLE_DELIMITER) As String
 	If this.pNext <> 0 Then
-		Return this.value + CHR_FIELD_DELIMITER + this.pNext->rToString()
+		Return this.value + fldDel + this.pNext->rToString()
 	Else
 		Return this.value
 	EndIf

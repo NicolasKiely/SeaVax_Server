@@ -84,7 +84,7 @@ End Sub
  '  Lists info of a directory or command
  '
  ' Command name:
- '  /dat/ls
+ '  /dat/info
  '
  ' Targets:
  '  Clients
