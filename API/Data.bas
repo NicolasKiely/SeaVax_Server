@@ -23,20 +23,18 @@
  ' - text (Generic text for user):
  '		Directory/Command name
  '/
-Sub CMD_ListDirectory(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr)
+Sub CMD_ListDirectory(envVars As CmdEnv)
 	
-	Dim As Server Ptr pServer = CPtr(Server Ptr, aServer)
+	Dim As Server Ptr pServer = CPtr(Server Ptr, envVars.aServer)
 	Dim As Record Ptr pLineErr = 0
 	Dim As String dirName
 	
 	/' Set up header '/
-	pPipeOut->addToHeader("Query")
-	pPipeOut->addToColumn("Text")
+	envVars.pPipeOut->addToHeader("Query")
+	envVars.pPipeOut->addToColumn("Text")
 	
 	/' Pop parameters '/
-	Dim As Param Ptr prmDir = pParam->popParam("directory", "d")
+	Dim As Param Ptr prmDir = envVars.pParam->popParam("directory", "d")
 	
 	Dim As Domain Ptr pD = 0
 	Dim As Domain Ptr pSubD = 0
@@ -59,7 +57,7 @@ Sub CMD_ListDirectory(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pLineErr->addField("CMD_ListDirectory")
 		pLineErr->addField("Could not find directory")
 		pLineErr->addField(dirName)
-		pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addRecord(pLineErr)
 	
 	Else
 		/' Its actually the child domain and commands were after '/
@@ -69,12 +67,12 @@ Sub CMD_ListDirectory(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 	
 	/' Write to output '/
 	While pSubD <> 0
-		pPipeOut->addRecord(loadRecordFromString("d: " + pSubD->text))
+		envVars.pPipeOut->addRecord(loadRecordFromString("d: " + pSubD->text))
 		pSubD = pSubD->pNext
 	Wend
 	
 	While pC <> 0
-		pPipeOut->addRecord(loadRecordFromString("c: " + pC->text))
+		envVars.pPipeOut->addRecord(loadRecordFromString("c: " + pC->text))
 		pC = pC->pNext
 	Wend
 End Sub
@@ -96,22 +94,20 @@ End Sub
  ' - text (Generic text for user):
  '		Directory info
  '/
-Sub CMD_directoryInfo(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr)
+Sub CMD_directoryInfo(envVars As CmdEnv)
 	
-	Dim As Server Ptr pServer = CPtr(Server Ptr, aServer)
+	Dim As Server Ptr pServer = CPtr(Server Ptr, envVars.aServer)
 	Dim As Record Ptr pLineErr = 0
 	Dim As Domain Ptr pD = 0
 	Dim As Domain Ptr pSubD = 0
 	Dim As Cmd Ptr pC = 0
 	
 	/' Set up header '/
-	pPipeOut->addToHeader("Query")
-	pPipeOut->addToColumn("Text")
+	envVars.pPipeOut->addToHeader("Query")
+	envVars.pPipeOut->addToColumn("Text")
 	
 	/' Pop parameters '/
-	Dim As Param Ptr prmDir = pParam->popParam("directory", "d")
+	Dim As Param Ptr prmDir = envVars.pParam->popParam("directory", "d")
 	
 	
 	/' Try looking up domain first '/
@@ -119,21 +115,21 @@ Sub CMD_directoryInfo(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 	pD = lookupDomain(dirName, pServer->pRootCmd)
 	
 	If pD <> 0 Then
-		pPipeOut->addRecord(loadRecordFromString(pD->info))
+		envVars.pPipeOut->addRecord(loadRecordFromString(pD->info))
 		
 	Else
 		/' Try looking up command '/
 		pC = lookupCmd(dirName, pServer->pRootCmd)
 		
 		If pC <> 0 Then
-			pPipeOut->addRecord(loadRecordFromString(pC->info))
+			envVars.pPipeOut->addRecord(loadRecordFromString(pC->info))
 			
 		Else
 			pLineErr = New Record()
 			pLineErr->addField("CMD_DirectoryInfo")
 			pLineErr->addField("Could not find directory")
 			pLineErr->addField(dirName)
-			pPipeErr->addRecord(pLineErr)
+			envVars.pPipeErr->addRecord(pLineErr)
 		EndIf
 	EndIf
 	
@@ -143,7 +139,7 @@ End Sub
 
 
 /' Description:
- '  Lists flag infor for a command
+ '  Lists flag info for a command
  '
  ' Command name:
  '  /dat/lsf
@@ -157,25 +153,23 @@ End Sub
  ' Returns:
  ' - flag name | letter | min arg | max arg | min use | max use | info
  '/
-Sub CMD_flagInfo(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr)
+Sub CMD_flagInfo(envVars As CmdEnv)
 	
-	Dim As Server Ptr pServer = CPtr(Server Ptr, aServer)
+	Dim As Server Ptr pServer = CPtr(Server Ptr, envVars.aServer)
 	Dim As Record Ptr pLineErr = 0
 	
 	/' Set up header '/
-	pPipeOut->addToHeader("Query")
-	pPipeOut->addToColumn("name")
-	pPipeOut->addToColumn("letter")
-	pPipeOut->addToColumn("minArg")
-	pPipeOut->addToColumn("maxArg")
-	pPipeOut->addToColumn("minUse")
-	pPipeOut->addToColumn("maxUse")
-	pPipeOut->addToColumn("info")
+	envVars.pPipeOut->addToHeader("Query")
+	envVars.pPipeOut->addToColumn("name")
+	envVars.pPipeOut->addToColumn("letter")
+	envVars.pPipeOut->addToColumn("minArg")
+	envVars.pPipeOut->addToColumn("maxArg")
+	envVars.pPipeOut->addToColumn("minUse")
+	envVars.pPipeOut->addToColumn("maxUse")
+	envVars.pPipeOut->addToColumn("info")
 	
 	/' Pop parameters '/
-	Dim As Param Ptr prmDir = pParam->popParam("directory", "d")
+	Dim As Param Ptr prmDir = envVars.pParam->popParam("directory", "d")
 	
 	
 	/' Try looking up command '/
@@ -194,7 +188,7 @@ Sub CMD_flagInfo(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 			pRec->addField(Str(pFlag->minUse))
 			pRec->addField(Str(pFlag->maxUse))
 			pRec->addField(pFlag->info)
-			pPipeOut->addRecord(pRec)
+			envVars.pPipeOut->addRecord(pRec)
 			
 			pFlag = pFlag->pNext
 		Wend
@@ -204,7 +198,7 @@ Sub CMD_flagInfo(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pLineErr->addField("CMD_FlagInfo")
 		pLineErr->addField("Could not find Command")
 		pLineErr->addField(dirName)
-		pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addRecord(pLineErr)
 	EndIf
 	
 	

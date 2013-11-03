@@ -4,9 +4,7 @@
 
 #Include Once "FunctionList.bi"
 
-Sub CMD_tableColumns(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr)
+Sub CMD_tableColumns(envVars As CmdEnv)
 	
 	/' TODO: Implement! '/
 End Sub

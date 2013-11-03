@@ -338,6 +338,7 @@ Sub Server.handleClientInput(pTalker As Client Ptr, zDatIn As ZString Ptr, datLe
 				Dim As Param Ptr pCompPar = compileParameters(pars, @parErr)
 				
 				If pCmd <> 0 And pCompPar <> 0 Then
+					Dim As CmdEnv envVars
 					/' Call command function '/
 					
 					/' Set up pipe in from old pipe out, then make new pipe out '/
@@ -347,7 +348,13 @@ Sub Server.handleClientInput(pTalker As Client Ptr, zDatIn As ZString Ptr, datLe
 					pPipeOut->addToHeader(echo)
 					
 					/' Run '/
-					pCmd->callFunc(pPipeIn, pPipeOut, pPipeErr, pCompPar, pTalker, @This)
+					envVars.pPipeIn  = pPipeIn
+					envVars.pPipeOut = pPipeOut
+					envVars.pPipeErr = pPipeErr
+					envVars.pParam   = pCompPar
+					envVars.aClient  = pTalker
+					envVars.aServer  = @This
+					pCmd->callFunc(envVars)
 					
 					Delete pCompPar
 					

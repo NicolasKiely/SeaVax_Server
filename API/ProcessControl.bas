@@ -22,11 +22,9 @@
  ' Returns:
  '  Nothing
  '/
-Sub CMD_stopServer(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr)
+Sub CMD_stopServer(envVars As CmdEnv)
 		
-	Dim As Server Ptr pServer = CPtr(Server Ptr, aServer)
+	Dim As Server Ptr pServer = CPtr(Server Ptr, envVars.aServer)
 	pServer->shutDown = -1
 	/' TODO: Properly Handle parameters '/
 End Sub

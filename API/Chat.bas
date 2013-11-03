@@ -18,17 +18,15 @@
  ' Output:
  '  None. Chat message broadcasting is done by the chatroom/ChatRoom module
  '/
-Sub CMD_chatMessage(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr)
+Sub CMD_chatMessage(envVars As CmdEnv)
 	
-	Dim As Server Ptr pServer = CPtr(Server Ptr, aServer)
-	Dim As Client Ptr pClient = CPtr(Client Ptr, aClient)
+	Dim As Server Ptr pServer = CPtr(Server Ptr, envVars.aServer)
+	Dim As Client Ptr pClient = CPtr(Client Ptr, envVars.aClient)
 	Dim As Record Ptr pLineErr = 0
 	
 	/' Pop parameters '/
-	Dim As Param Ptr prmRoom = pParam->popParam("room", "r")
-	Dim As Param Ptr prmMsg = pParam->popParam("message", "m")
+	Dim As Param Ptr prmRoom = envVars.pParam->popParam("room", "r")
+	Dim As Param Ptr prmMsg = envVars.pParam->popParam("message", "m")
 	
 	/' Find target chat room '/
 	Dim As ChatRoom Ptr pRoom = 0
@@ -46,7 +44,7 @@ Sub CMD_chatMessage(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pLineErr->addField("CmdChatMessage")
 		pLineErr->addField("Room not found")
 		pLineErr->addField(roomName)
-		pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addRecord(pLineErr)
 	EndIf
 
 	

@@ -16,6 +16,7 @@ dat/Accounts/*
 *.swp
 *.exe
 *.undo
+*.lnk
 *~.nib
 local.properties
 .classpath

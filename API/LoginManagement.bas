@@ -18,12 +18,10 @@
  ' Returns:
  '  Account name logged in
  '/
-Sub CMD_clientLogin(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr)
+Sub CMD_clientLogin(envVars As CmdEnv)
 		
-	Dim As Server Ptr pServer = CPtr(Server Ptr, aServer)
-	Dim As Client Ptr pClient = CPtr(Client Ptr, aClient)
+	Dim As Server Ptr pServer = CPtr(Server Ptr, envVars.aServer)
+	Dim As Client Ptr pClient = CPtr(Client Ptr, envVars.aClient)
 	Dim As Record Ptr pLineErr = 0
 	
 	If pClient = 0 Then
@@ -31,14 +29,14 @@ Sub CMD_clientLogin(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pLineErr->addField("CmdClientLogin")
 		pLineErr->addField("No client attached")
 		pLineErr->addField("pClient == 0")
-		pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addRecord(pLineErr)
 		
 		Exit Sub
 	EndIf
 	
 	/' Pop parameters '/
-	Dim As Param Ptr prmAcc = pParam->popParam("account", "a")
-	Dim As Param Ptr prmPass = pParam->popParam("password", "p")
+	Dim As Param Ptr prmAcc = envVars.pParam->popParam("account", "a")
+	Dim As Param Ptr prmPass = envVars.pParam->popParam("password", "p")
 	
 	/' Lookup account name '/
 	Dim As Account Ptr pAcc
@@ -54,7 +52,7 @@ Sub CMD_clientLogin(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pLineErr->addField("CmdClientLogin")
 		pLineErr->addField("Could not load account")
 		pLineErr->addField("Attempted to load account '"+accName+"'")
-		pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addRecord(pLineErr)
 		
 		If prmAcc <> 0 Then Delete prmAcc
 		If prmPass <> 0 Then Delete prmPass
@@ -76,16 +74,16 @@ Sub CMD_clientLogin(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pAcc->isLoggedIn = -1
 		
 		/' Output account logged in as '/
-		pPipeOut->addToHeader("Login")
-		pPipeOut->addToColumn("Name")
-		pPipeOut->addRecord(loadRecordFromString(accName))
+		envVars.pPipeOut->addToHeader("Login")
+		envVars.pPipeOut->addToColumn("Name")
+		envVars.pPipeOut->addRecord(loadRecordFromString(accName))
 		
 	Else
 		pLineErr = New Record()
 		pLineErr->addField("CmdClientLogin")
 		pLineErr->addField("Invalid password")
 		pLineErr->addField("Wrong password entered")
-		pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addRecord(pLineErr)
 	EndIf
 
 	
@@ -111,12 +109,10 @@ End Sub
  ' Returns:
  '  Nothing
  '/
-Sub CMD_clientChangePassword(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr)
+Sub CMD_clientChangePassword(envVars As CmdEnv)
 		
-	Dim As Server Ptr pServer = CPtr(Server Ptr, aServer)
-	Dim As Client Ptr pClient = CPtr(Client Ptr, aClient)
+	Dim As Server Ptr pServer = CPtr(Server Ptr, envVars.aServer)
+	Dim As Client Ptr pClient = CPtr(Client Ptr, envVars.aClient)
 	Dim As Record Ptr pLineErr = 0
 	
 	/' Make sure theres an account to work with '/
@@ -125,7 +121,7 @@ Sub CMD_clientChangePassword(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pLineErr->addField("CmdClientChangePassword")
 		pLineErr->addField("No client attached")
 		pLineErr->addField("pClient or pClient->pAcc == 0")
-		pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addRecord(pLineErr)
 		
 		Exit Sub
 	EndIf
@@ -133,8 +129,8 @@ Sub CMD_clientChangePassword(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 	
 	
 	/' Pop parameters '/
-	Dim As Param Ptr prmOld = pParam->popParam("old", "o")
-	Dim As Param Ptr prmNew = pParam->popParam("new", "n")
+	Dim As Param Ptr prmOld = envVars.pParam->popParam("old", "o")
+	Dim As Param Ptr prmNew = envVars.pParam->popParam("new", "n")
 	
 	/' Lookup old password '/
 	Dim As String oldPass
@@ -149,7 +145,7 @@ Sub CMD_clientChangePassword(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pLineErr->addField("CmdClientChangePassword")
 		pLineErr->addField("Could not validate password")
 		pLineErr->addField("Attempted to load account '"+pAcc->userName+"'")
-		pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addRecord(pLineErr)
 		
 		If prmOld <> 0 Then Delete prmOld
 		If prmNew <> 0 Then Delete prmNew
@@ -180,17 +176,15 @@ End Sub
  ' Returns:
  '  Account name
  '/
-Sub CMD_manCreateAccount(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr)
+Sub CMD_manCreateAccount(envVars As CmdEnv)
 	
-	Dim As Server Ptr pServer = CPtr(Server Ptr, aServer)
-	Dim As Client Ptr pClient = CPtr(Client Ptr, aClient)
+	Dim As Server Ptr pServer = CPtr(Server Ptr, envVars.aServer)
+	Dim As Client Ptr pClient = CPtr(Client Ptr, envVars.aClient)
 	Dim As Record Ptr pLineErr = 0
 	
 	/' Pop parameters '/
-	Dim As Param Ptr prmAcc = pParam->popParam("account", "a")
-	Dim As Param Ptr prmPass = pParam->popParam("password", "p")
+	Dim As Param Ptr prmAcc = envVars.pParam->popParam("account", "a")
+	Dim As Param Ptr prmPass = envVars.pParam->popParam("password", "p")
 	
 	/' Check to see if account already exists '/
 	Dim As Account Ptr pAcc = pServer->accMan.lookupAccount(prmAcc->pVals->text)
@@ -199,7 +193,7 @@ Sub CMD_manCreateAccount(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pLineErr->addField("CmdManCreateClient")
 		pLineErr->addField("Attempted to create existing account")
 		pLineErr->addField(prmAcc->pVals->text)
-		pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addRecord(pLineErr)
 		
 		If prmAcc <> 0 Then Delete prmAcc
 		If prmPass <> 0 Then Delete prmPass
@@ -219,7 +213,7 @@ Sub CMD_manCreateAccount(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pLineErr->addField("CmdManCreateClient")
 		pLineErr->addField("Could not create new account")
 		pLineErr->addField(prmAcc->pVals->text)
-		pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addRecord(pLineErr)
 	EndIf
 	
 	
@@ -243,15 +237,13 @@ End Sub
  ' Returns:
  '  Account name
  '/
-Sub CMD_listAccounts(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr)
+Sub CMD_listAccounts(envVars As CmdEnv)
 	
-	Dim As Server Ptr pServer = CPtr(Server Ptr, aServer)
+	Dim As Server Ptr pServer = CPtr(Server Ptr, envVars.aServer)
 	
 	/' Set up table '/
-	pPipeOut->addToColumn("account")
-	pPipeOut->addToColumn("logged")
+	envVars.pPipeOut->addToColumn("account")
+	envVars.pPipeOut->addToColumn("logged")
 	
 	/' Loop through accounts '/
 	Dim As Account Ptr pAcc = pServer->accMan.pAcc
@@ -266,7 +258,7 @@ Sub CMD_listAccounts(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		EndIf
 		
 		/' Add to results '/
-		pPipeOut->addRecord(pRec)
+		envVars.pPipeOut->addRecord(pRec)
 		
 		pAcc = pAcc->pNext
 	Wend
@@ -288,12 +280,10 @@ End Sub
  ' Returns:
  '  Nothing
  '/
-Sub CMD_clientLogout(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr)
+Sub CMD_clientLogout(envVars As CmdEnv)
 		
-	Dim As Server Ptr pServer = CPtr(Server Ptr, aServer)
-	Dim As Client Ptr pClient = CPtr(Client Ptr, aClient)
+	Dim As Server Ptr pServer = CPtr(Server Ptr, envVars.aServer)
+	Dim As Client Ptr pClient = CPtr(Client Ptr, envVars.aClient)
 	Dim As Record Ptr pLineErr = 0
 	
 	If pClient = 0 Then
@@ -301,7 +291,7 @@ Sub CMD_clientLogout(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pLineErr->addField("CmdClientLogout")
 		pLineErr->addField("No client attached")
 		pLineErr->addField("pClient == 0")
-		pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addRecord(pLineErr)
 		
 		Exit Sub
 	EndIf
@@ -316,6 +306,6 @@ Sub CMD_clientLogout(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		pLineErr->addField("CmdClientLogout")
 		pLineErr->addField("Not logged in to any account")
 		pLineErr->addField("pClient->pAcc == 0")
-		pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addRecord(pLineErr)
 	EndIf
 End Sub

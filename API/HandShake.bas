@@ -21,13 +21,11 @@
  '  Major version number | minor version number
  '  single line
  '/
-Sub CMD_getProtocolVersion(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr)
+Sub CMD_getProtocolVersion(envVars As CmdEnv)
 	
-	pPipeOut->addToColumn("major")
-	pPipeOut->addToColumn("minor")
-	pPipeOut->addRecord(loadRecordFromString(!"0\t1"))
+	envVars.pPipeOut->addToColumn("major")
+	envVars.pPipeOut->addToColumn("minor")
+	envVars.pPipeOut->addRecord(loadRecordFromString(!"0\t1"))
 End Sub
 
 
@@ -47,14 +45,12 @@ End Sub
  '  Major version | Minor Version | Release type
  '  Single Line
  '/
-Sub CMD_getServerVersion(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr)
+Sub CMD_getServerVersion(envVars As CmdEnv)
 	
-	pPipeOut->addToColumn("major")
-	pPipeOut->addToColumn("minor")
-	pPipeOut->addToColumn("type")
-	pPipeOut->addRecord(loadRecordFromString(!"0\t1\tpre alpha"))
+	envVars.pPipeOut->addToColumn("major")
+	envVars.pPipeOut->addToColumn("minor")
+	envVars.pPipeOut->addToColumn("type")
+	envVars.pPipeOut->addRecord(loadRecordFromString(!"0\t1\tpre alpha"))
 End Sub
 
 
@@ -75,14 +71,12 @@ End Sub
  '  Returns as many lines as the sum of the authors contributions
  '  Modification name is vanilla for contributions to core code
  '/
-Sub CMD_getModVersion(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr)
+Sub CMD_getModVersion(envVars As CmdEnv)
 	
-	pPipeOut->addToColumn("mod")
-	pPipeOut->addToColumn("major")
-	pPipeOut->addToColumn("minor")
-	pPipeOut->addToColumn("author")
-	pPipeOut->addRecord(loadRecordFromString(!"vanilla\t0\t1\tNic Kiely"))
+	envVars.pPipeOut->addToColumn("mod")
+	envVars.pPipeOut->addToColumn("major")
+	envVars.pPipeOut->addToColumn("minor")
+	envVars.pPipeOut->addToColumn("author")
+	envVars.pPipeOut->addRecord(loadRecordFromString(!"vanilla\t0\t1\tNic Kiely"))
 End Sub
 

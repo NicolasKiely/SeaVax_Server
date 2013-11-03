@@ -40,18 +40,14 @@
 
 /' For properly defining the subroutines to bind to commands '/
 #Macro DECLARE_CMD_SUB(FUNC_TO_BIND)
-	Declare Sub CMD_##FUNC_TO_BIND(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr)
+	Declare Sub CMD_##FUNC_TO_BIND(envVars As CmdEnv)
 #EndMacro
 
 
 
 /' Builds the array of commands for binding '/
 #Macro BUILD_CMD_ARRAY_MACRO()
-	Dim CMD_BINDING_ARRAY(1 To 14) As Sub(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-		pPipeErr As Table Ptr, pParam As Param Ptr, _
-		aClient As Any Ptr, aServer As Any Ptr) _
+	Dim CMD_BINDING_ARRAY(1 To 14) As Sub(envVars As CmdEnv) _
 		= _
 		{@CMD_getProtocolVersion, @CMD_getServerVersion, @CMD_getModVersion, @CMD_stopServer, @CMD_listDirectory, _
 		@CMD_tableColumns, @CMD_chatMessage, @CMD_clientLogin, @CMD_clientChangePassword, @CMD_manCreateAccount, _

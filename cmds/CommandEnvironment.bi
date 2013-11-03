@@ -17,8 +17,8 @@ Type CmdEnv
 	/' List of parameters for the command '/
 	Dim As Param Ptr pParam
 	
-	/' Account to run the function on behalf of '/
-	Dim As Any Ptr aAccount
+	/' Client to run the function on behalf of '/
+	Dim As Any Ptr aClient
 	
 	/' Pointer to the global server state information '/
 	Dim As Any Ptr aServer

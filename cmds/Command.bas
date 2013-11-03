@@ -422,16 +422,14 @@ Sub Flag.clearTempData()
 End Sub
 
 
-Sub Cmd.callFunc(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-			pPipeErr As Table Ptr, pParam As Param Ptr, _
-			aAccount As Any Ptr, aServer As Any Ptr)
+Sub Cmd.callFunc(envVars As CmdEnv)
 	
 	If this.pFunc <> 0 Then
 		Dim As Record Ptr pLineErr = 0
 		If this.pFlag <> 0 Then this.pFlag->clearTempData()
 		
 		/' Check each parameter '/
-		Dim As Param Ptr pPar = pParam->pNext
+		Dim As Param Ptr pPar = envVars.pParam->pNext
 		Dim As Flag Ptr pTempFlag
 		While pPar <> 0
 			/' Find flag for this parameter'/
@@ -444,7 +442,7 @@ Sub Cmd.callFunc(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 				pLineErr->addField("Cmd "+this.text)
 				pLineErr->addField("Undefined parameter found")
 				pLineErr->addField(pPar->text)
-				pPipeErr->addRecord(pLineErr)
+				envVars.pPipeErr->addRecord(pLineErr)
 				Exit Sub
 			EndIf
 			
@@ -458,7 +456,7 @@ Sub Cmd.callFunc(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 				pLineErr->addField("Cmd "+this.text)
 				pLineErr->addField("Too few values for parameter ("+Str(pTempFlag->minArg)+")")
 				pLineErr->addField(pPar->text+" ("+Str(pTempFlag->tempArg)+")")
-				pPipeErr->addRecord(pLineErr)
+				envVars.pPipeErr->addRecord(pLineErr)
 				Exit Sub
 			EndIf
 			If pTempFlag->tempArg > pTempFlag->maxArg And pTempFlag->maxArg<>-1 Then
@@ -466,7 +464,7 @@ Sub Cmd.callFunc(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 				pLineErr->addField("Cmd "+this.text)
 				pLineErr->addField("Too many values for parameter ("+Str(pTempFlag->maxArg)+")")
 				pLineErr->addField(pPar->text+" ("+Str(pTempFlag->tempArg)+")")
-				pPipeErr->addRecord(pLineErr)
+				envVars.pPipeErr->addRecord(pLineErr)
 				Exit Sub
 			EndIf
 			
@@ -481,7 +479,7 @@ Sub Cmd.callFunc(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 				pLineErr->addField("Cmd "+this.text)
 				pLineErr->addField("Too few uses of parameter ("+Str(pTempFlag->minUse)+")")
 				pLineErr->addField(pTempFlag->lName+" ("+Str(pTempFlag->tempUse)+")")
-				pPipeErr->addRecord(pLineErr)
+				envVars.pPipeErr->addRecord(pLineErr)
 				Exit Sub
 			EndIf
 			If pTempFlag->tempUse > pTempFlag->maxUse And pTempFlag->maxUse<>-1 Then
@@ -489,7 +487,7 @@ Sub Cmd.callFunc(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 				pLineErr->addField("Cmd "+this.text)
 				pLineErr->addField("Too many uses of parameter ("+Str(pTempFlag->maxUse)+")")
 				pLineErr->addField(pTempFlag->lName+" ("+Str(pTempFlag->tempUse)+")")
-				pPipeErr->addRecord(pLineErr)
+				envVars.pPipeErr->addRecord(pLineErr)
 				Exit Sub
 			EndIf
 			
@@ -498,7 +496,8 @@ Sub Cmd.callFunc(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
 		
 		
 		/' Call function if no error raised '/
-		this.pFunc(pPipeIn, pPipeOut, pPipeErr, pParam, aAccount, aServer)
+		
+		this.pFunc(envVars)
 	EndIf
 End Sub
 

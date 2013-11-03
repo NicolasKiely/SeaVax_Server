@@ -4,6 +4,7 @@
 
 #Include Once "../table/Table.bi"
 #Include Once "ParList.bi"
+#Include Once "CommandEnvironment.bi"
 
 
 #Define DOMAIN_LIST_FILE "dat/DomainListing.txt"
@@ -82,14 +83,10 @@ Type Cmd
 	 ' aAccount is the account to run the function on behalf of
 	 ' aServer is the pointer to the global server state information
 	 '/
-	Dim pFunc as Sub(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-			pPipeErr As Table Ptr, pParam As Param Ptr, _
-			aAccount As Any Ptr, aServer As Any Ptr)
+	Dim pFunc as Sub(envVars As CmdEnv)
 	
 	/' Calls pFunc if not-null and parameters fit flag specs '/
-	Declare Sub callFunc(pPipeIn As Table Ptr, pPipeOut As Table Ptr, _
-			pPipeErr As Table Ptr, pParam As Param Ptr, _
-			aAccount As Any Ptr, aServer As Any Ptr)
+	Declare Sub callFunc(envVars As CmdEnv)
 	
 	Declare Constructor()
 	Declare Destructor()
