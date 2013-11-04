@@ -16,7 +16,7 @@ End Destructor
 
 Function Fld.rToString(fldDel As String = CHR_TABLE_DELIMITER) As String
 	If this.pNext <> 0 Then
-		Return this.value + fldDel + this.pNext->rToString()
+		Return this.value + fldDel + this.pNext->rToString(fldDel)
 	Else
 		Return this.value
 	EndIf
@@ -181,9 +181,9 @@ Function Table.appendField(text As String) As Integer
 End Function
 
 
-Function loadTableFromFile(fileName As String) As Table Ptr
+Function loadTableFromFile(fileName As String, pTable As Table Ptr = 0) As Table Ptr
 	/' Create table '/
-	Dim As Table Ptr pTable = New Table()
+	If pTable = 0 Then pTable = New Table()
 	If pTable = 0 Then Return 0
 	
 	
@@ -376,6 +376,26 @@ Sub Table.refresh()
 	headerNum = 0
 	colNum = 0
 	recNum = 0
+End Sub
+
+
+Sub Table.save(fileName As String)
+	/' Open info file '/
+	Dim As Integer fh = FreeFile()
+	Open fileName For Output As #fh
+	
+	If Err=3 OrElse Err=2 Then Exit Sub
+	
+	/' Print columns '/
+	If this.pCol <> 0 Then Print #fh, this.pCol->rToString(Chr(9))
+	
+	Dim As Record Ptr pRs = this.pRec
+	While pRs <> 0
+		Print #fh, pRs->pFld->rToString(Str(9))
+		pRs = pRs->pNext
+	Wend
+	
+	Close #fh
 End Sub
 
 

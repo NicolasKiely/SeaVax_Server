@@ -30,6 +30,9 @@ Type Account
 	/' Returns string representation of account '/
 	Declare Function toRecord() As String
 	
+	/' Returns path to account directory '/
+	Declare Function getPath(appendPath As String = "") As String
+	
 	Declare Constructor()
 	Declare Destructor()
 End Type

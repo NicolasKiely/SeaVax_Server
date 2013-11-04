@@ -48,6 +48,15 @@ Function Account.save() As Integer
 End Function
 
 
+Function Account.getPath(appendPath As String = "") As String
+	If appendPath = "" Then
+		Return ACCOUNT_ROOT_DIR + this.userName
+	Else
+		Return ACCOUNT_ROOT_DIR + this.userName + "/" + appendPath
+	End If
+End Function
+
+
 Constructor AccountManager()
 	this.pAcc = 0
 End Constructor

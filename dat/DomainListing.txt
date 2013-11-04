@@ -8,3 +8,5 @@ id	name	parent	info
 7	log	/acc	Client-side account managent
 8	util	/	Utility functions
 9	chat	/	Chat functions
+10	maze	/	Maze game functionality
+11	play	maze	Player-side game functionality

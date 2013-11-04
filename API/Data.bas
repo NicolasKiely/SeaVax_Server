@@ -24,14 +24,19 @@
  '		Directory/Command name
  '/
 Sub CMD_ListDirectory(envVars As CmdEnv)
+	CAST_ENV_PARS_MACRO()
 	
-	Dim As Server Ptr pServer = CPtr(Server Ptr, envVars.aServer)
+	'Dim As Server Ptr pServer = CPtr(Server Ptr, envVars.aServer)
 	Dim As Record Ptr pLineErr = 0
 	Dim As String dirName
+	
+	
 	
 	/' Set up header '/
 	envVars.pPipeOut->addToHeader("Query")
 	envVars.pPipeOut->addToColumn("Text")
+	
+	Print envVars.pParam
 	
 	/' Pop parameters '/
 	Dim As Param Ptr prmDir = envVars.pParam->popParam("directory", "d")

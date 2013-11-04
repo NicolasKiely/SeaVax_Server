@@ -13,3 +13,4 @@ id	name	domain	info
 12	logout	/acc/log	Logs out of account
 13	info	/dat	Lists info of a directory or command
 14	lsf	/dat	Lists flag info of a command
+15	mapStats	/maze/play	Loads account's maps and map info

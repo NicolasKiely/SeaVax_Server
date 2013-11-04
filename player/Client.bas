@@ -50,7 +50,7 @@ Sub Client.sendTable(pTable As Table Ptr)
 	
 	Dim As String tabStr = pTable->toString()
 	
-	send(this.sock, StrPtr(tabStr), Len(tabStr), 0)
+	Dim As Integer sendLen = send(this.sock, StrPtr(tabStr), Len(tabStr), 0)
 End Sub
 
 

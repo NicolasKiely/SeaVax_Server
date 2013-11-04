@@ -108,6 +108,9 @@ Type Table
 	/' Returns second value column for a given first-column key '/
 	Declare Function findValue(key As String) As String
 	
+	/' Saves table to disk '/
+	Declare Sub save(fileName As String)
+	
 	/' Deletes record, column, and header data '/
 	Declare Sub refresh()
 	
@@ -119,7 +122,7 @@ End Type
 /'----------------------------------------------------------------------------
  ' Loads a single table file
  ---------------------------------------------------------------------------'/
-Declare Function loadTableFromFile(fileName As String) As Table Ptr
+Declare Function loadTableFromFile(fileName As String, pTable As Table Ptr = 0) As Table Ptr
 
 
 /'----------------------------------------------------------------------------

@@ -1,6 +1,13 @@
 #Include Once "../table/Table.bi"
 #Include Once "ParList.bi"
 
+/' For convieniently casting Environment parameters '/
+#Macro CAST_ENV_PARS_MACRO()
+	Dim As Server Ptr pServer = CPtr(Server Ptr, envVars.aServer)
+	Dim As Client Ptr pClient = CPtr(Client Ptr, envVars.aClient)
+#EndMacro
+
+
 /'----------------------------------------------------------------------------
  ' Environmental parameters for a command call
  ---------------------------------------------------------------------------'/

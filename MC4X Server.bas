@@ -89,6 +89,9 @@ If FileExists("saves/" + worldRaw) = 0 Then
 EndIf
 
 
+/' Move back to console '/
+'Screen 0
+
 Print "Networking stuff"
 serv.initSock()
 

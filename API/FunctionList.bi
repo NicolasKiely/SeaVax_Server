@@ -47,11 +47,11 @@
 
 /' Builds the array of commands for binding '/
 #Macro BUILD_CMD_ARRAY_MACRO()
-	Dim CMD_BINDING_ARRAY(1 To 14) As Sub(envVars As CmdEnv) _
+	Dim CMD_BINDING_ARRAY(1 To 15) As Sub(envVars As CmdEnv) _
 		= _
 		{@CMD_getProtocolVersion, @CMD_getServerVersion, @CMD_getModVersion, @CMD_stopServer, @CMD_listDirectory, _
 		@CMD_tableColumns, @CMD_chatMessage, @CMD_clientLogin, @CMD_clientChangePassword, @CMD_manCreateAccount, _
-		@CMD_listAccounts, @CMD_clientLogout, @CMD_directoryInfo, @CMD_flagInfo}
+		@CMD_listAccounts, @CMD_clientLogout, @CMD_directoryInfo, @CMD_flagInfo, @CMD_getMapStats}
 #EndMacro
 
 
@@ -70,3 +70,4 @@ DECLARE_CMD_SUB(listAccounts)             ' 11
 DECLARE_CMD_SUB(clientLogout)             ' 12
 DECLARE_CMD_SUB(directoryInfo)            ' 13
 DECLARE_CMD_SUB(flagInfo)                 ' 14
+DECLARE_CMD_SUB(getMapStats)              ' 15
