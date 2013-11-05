@@ -2,7 +2,8 @@ SeaV4X
 
 TODO list:
 		permissions
-	Next milestone: permission system
+		Fixing crash-on-login bug
+	Next milestone: fixing crash-on-login bug
 
 
 Pie-in-Sky List:

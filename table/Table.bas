@@ -23,6 +23,36 @@ Function Fld.rToString(fldDel As String = CHR_FIELD_DELIMITER) As String
 End Function
 
 
+Function Fld.rToDivString(div As Integer, counter As Integer = 0) As String
+	If this.pNext <> 0 Then
+		If div = 0 Then
+			/' Ignore division '/
+			Return this.value + CHR_FIELD_DELIMITER + this.pNext->rToDivString(div, counter)
+			
+		Else
+			/' Factor in dividing string '/
+			If div <= counter Then
+				Return this.value + CHR_TABLE_DELIMITER + this.pNext->rToDivString(div, 0)
+				
+			Else
+				return this.value + CHR_FIELD_DELIMITER + this.pNext->rToDivString(div, counter+1)
+			EndIf
+		EndIf
+	Else
+		Return this.value
+	EndIf
+End Function
+
+
+Function Fld.getNumberOfFields() As Integer
+	If this.pNext <> 0 Then
+		Return this.pNext->getNumberOfFields() + 1
+	Else
+		Return 1
+	EndIf
+End Function
+
+
 Constructor Record()
 	this.pFld = 0
 	this.lFld = 0
@@ -292,20 +322,20 @@ Function Table.toString() As String
 	
 	/' Header '/
 	If this.pHeader <> 0 Then
-		tabStr = pHeader->rToString()
+		tabStr = pHeader->rToString(CHR_FIELD_DELIMITER)
 	EndIf
 	tabStr += CHR_TABLE_DELIMITER
 	
 	/' Columns '/
 	If this.pCol <> 0 Then
-		tabStr += pCol->rToString()
+		tabStr += pCol->rToString(CHR_FIELD_DELIMITER)
 	EndIf
 	tabStr += CHR_TABLE_DELIMITER
 	
 	/' Records '/
 	pTemp = this.pRec
 	While pTemp <> 0
-		tabStr += pTemp->pFld->rToString()
+		tabStr += pTemp->pFld->rToString(CHR_FIELD_DELIMITER)
 		
 		If pTemp->pNext <> 0 Then
 			/' Append extra field delimiter between records '/
@@ -330,18 +360,18 @@ Function Table.toPrettyString() As String
 	
 	/' Columns '/
 	If this.pCol <> 0 Then
-		tabStr += pCol->rToString()
+		tabStr += pCol->rToString(CHR_FIELD_DELIMITER)
 	EndIf
 	tabStr += "]" + CHR_TABLE_DELIMITER + "[R: "
 	
 	/' Records '/
 	pTemp = this.pRec
 	While pTemp <> 0
-		tabStr += pTemp->pFld->rToString()
+		tabStr += pTemp->pFld->rToString(CHR_FIELD_DELIMITER)
 		
 		If pTemp->pNext <> 0 Then
 			/' Append extra field delimiter between records '/
-			tabStr += CHR_FIELD_DELIMITER
+			tabStr += " ..." + CHR_TABLE_DELIMITER
 		EndIf
 		
 		pTemp = pTemp->pNext
@@ -454,4 +484,13 @@ Function Table.findValue(key As String) As String
 	Wend
 	
 	Return results
+End Function
+
+
+Function Table.getNumberOfColumns() As Integer
+	If this.pCol = 0 Then
+		Return 0
+	Else
+		Return this.pCol->getNumberOfFields()
+	EndIf
 End Function

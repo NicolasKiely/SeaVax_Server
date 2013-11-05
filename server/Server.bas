@@ -92,13 +92,10 @@ Sub Server.serverMain()
 		/' Handle chat rooms '/
 		If tick Mod CHAT_SLICE = 0 Then this.handleChatRooms()
 		
-		
-		
-		
 		/' Cap loop rate '/
 		Dim As Double loop_d = Timer - loopTime
 		If loop_d < LOOP_SLICE Then
-			Dim As Integer pausePeriod = (LOOP_SLICE - loop_d)*1000
+			Dim As Long pausePeriod = (LOOP_SLICE - loop_d)*1000
 			
 			/' Make sure to not accidently sleep 0 or -1 '/
 			If pausePeriod < 1 Then pausePeriod = 1

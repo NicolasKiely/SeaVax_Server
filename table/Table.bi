@@ -40,6 +40,12 @@ Type Fld
 	/' Recursively builds a string out of the field linked list '/
 	Declare Function rToString(fldDel As String = CHR_TABLE_DELIMITER) As String
 	
+	/' Recursively builds a string out of fields, breaks up across lines '/
+	Declare Function rToDivString(div As Integer, counter As Integer = 0) As String
+	
+	/' Returns number of fields in list '/
+	Declare Function getNumberOfFields() As Integer
+	
 	Declare Constructor()
 	Declare Destructor()
 End Type
@@ -116,6 +122,8 @@ Type Table
 	
 	/' Deletes record, column, and header data '/
 	Declare Sub refresh()
+	
+	Declare Function getNumberOfColumns() As Integer
 	
 	Declare Constructor()
 	Declare Destructor()
