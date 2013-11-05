@@ -101,6 +101,9 @@ Type Table
 	/' Returns a string representation of the table '/
 	Declare Function toString() As String
 	
+	/' Returns a formatted string representation of the table '/
+	Declare Function toPrettyString() As String
+	
 	/' Gets column ID from name. IC = ignore case '/
 	Declare Function getColumnID(columnName As String) As Integer
 	Declare Function getColumnID_IC(columnName As String) As Integer

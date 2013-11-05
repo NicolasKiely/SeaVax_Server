@@ -409,7 +409,7 @@ Sub Server.handleClientInput(pTalker As Client Ptr, zDatIn As ZString Ptr, datLe
 	
 	/' Send to client '/
 	If pOut->pHeader <> 0 Or pOut->pRec <> 0 Then
-		Print "|--- " + pOut->toString() + " ---|"
+		Print "|--- " + pOut->toPrettyString() + " ---|"
 		pTalker->sendTable(pOut)
 	End If
 	

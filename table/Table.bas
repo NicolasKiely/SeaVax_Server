@@ -14,7 +14,7 @@ Destructor Fld()
 End Destructor
 
 
-Function Fld.rToString(fldDel As String = CHR_TABLE_DELIMITER) As String
+Function Fld.rToString(fldDel As String = CHR_FIELD_DELIMITER) As String
 	If this.pNext <> 0 Then
 		Return this.value + fldDel + this.pNext->rToString(fldDel)
 	Else
@@ -213,7 +213,7 @@ Function loadTableFromFile(fileName As String, pTable As Table Ptr = 0) As Table
 	For i As Integer = 0 To Len(colLine) - 1
 		Dim As UByte c = colLine[i]
 		
-		If c = 9 Then
+		If c = ASC_FIELD_DELIMITER Then
 			/' Tab '/
 			If pTable->addToColumn(tempBuf) Then
 				Close #fh
@@ -264,7 +264,7 @@ Function loadRecordFromString(recStr As String) As Record Ptr
 	For i As Integer = 0 To Len(recStr) - 1
 		Dim As UByte c = recStr[i]
 		
-		If c = 9 Then
+		If c = ASC_FIELD_DELIMITER Then
 			If pRec->addField(tempBuf) Then
 				Delete pRec
 				Return 0
@@ -315,6 +315,38 @@ Function Table.toString() As String
 		pTemp = pTemp->pNext
 	Wend
 	tabStr += CHR_TABLE_DELIMITER
+
+	Return tabStr
+End Function
+
+
+Function Table.toPrettyString() As String
+	Dim As String tabStr = "[H: "
+	Dim As Record Ptr pTemp
+	
+	/' Header '/
+	If this.pHeader <> 0 Then tabStr += pHeader->rToString(CHR_FIELD_DELIMITER)
+	tabStr += "]" + CHR_TABLE_DELIMITER + "[C: "
+	
+	/' Columns '/
+	If this.pCol <> 0 Then
+		tabStr += pCol->rToString()
+	EndIf
+	tabStr += "]" + CHR_TABLE_DELIMITER + "[R: "
+	
+	/' Records '/
+	pTemp = this.pRec
+	While pTemp <> 0
+		tabStr += pTemp->pFld->rToString()
+		
+		If pTemp->pNext <> 0 Then
+			/' Append extra field delimiter between records '/
+			tabStr += CHR_FIELD_DELIMITER
+		EndIf
+		
+		pTemp = pTemp->pNext
+	Wend
+	tabStr += "]" + CHR_TABLE_DELIMITER
 
 	Return tabStr
 End Function
