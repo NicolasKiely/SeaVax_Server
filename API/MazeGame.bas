@@ -45,9 +45,12 @@ Sub CMD_getMapStats(envVars As CmdEnv)
 	Dim As Integer fh = FreeFile()
 	Open (pClient->pAcc->getPath("mazes.txt")) For Input As #fh
 	
+	
+	envVars.pPipeOut->addToHeader("MapStats")
+
+	
 	If Err = 2 Then
 		/' No maps created. Save empty one and return '/
-		envVars.pPipeOut->addToHeader("Maps")
 		envVars.pPipeOut->addToColumn("ID")
 		envVars.pPipeOut->addToColumn("Name")
 		envVars.pPipeOut->addToColumn("Size")

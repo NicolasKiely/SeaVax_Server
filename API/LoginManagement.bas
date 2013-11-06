@@ -40,9 +40,19 @@ Sub CMD_clientLogin(envVars As CmdEnv)
 	
 	/' Lookup account name '/
 	Dim As Account Ptr pAcc
-	Dim As String accName
+	Dim As String accName = ""
 	
-	accName = prmAcc->pVals->text
+	If prmAcc = 0 Or prmPass = 0 Then
+		Print "ERROR! prmAcc|prmPass = 0!" + Str(prmAcc) + ", " + Str(prmPass)
+	Else
+		If prmAcc->pVals = 0 Then
+			Print "ERROR! prmAcc|prmPass = 0!" + Str(prmAcc) + ", " + Str(prmPass)
+		Else
+			accName = prmAcc->pVals->text 'BUG!!! <--------
+		EndIf
+	EndIf
+	
+	
 	pAcc = pServer->accMan.lookupAccount(accName)
 	
 	

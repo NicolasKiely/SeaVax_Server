@@ -103,6 +103,7 @@ End Function
 Sub AccountManager.addAccount(pNewAccount As Account Ptr)
 	If this.pAcc = 0 Then
 		this.pAcc = pNewAccount
+		pNewAccount->pNext = 0
 		
 	Else
 		pNewAccount->pNext = this.pAcc

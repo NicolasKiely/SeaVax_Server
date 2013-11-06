@@ -200,7 +200,6 @@ Sub Server.handleReadSocks(pReadSet As fd_set Ptr)
 			
 			Else
 				pBuf[datLen] = 0
-				'Print "Message from client: '" + *pBuf + "'"
 				handleClientInput(pCurrent, pBuf, datLen)
 			EndIf
 			

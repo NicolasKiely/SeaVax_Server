@@ -226,7 +226,7 @@ Function loadTableFromFile(fileName As String, pTable As Table Ptr = 0) As Table
 	EndIf
 	
 	/' Set title '/
-	pTable->addToHeader(fileName)
+	'pTable->addToHeader(fileName)
 	
 	/' Load up columns '/
 	Dim As String colLine

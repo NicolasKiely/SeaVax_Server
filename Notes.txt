@@ -2,7 +2,7 @@ SeaV4X
 
 TODO list:
 		permissions
-		Fixing crash-on-login bug
+		Fixing crash-on-login bug (happens sooner if account login fails!), accMan Lookup?
 	Next milestone: fixing crash-on-login bug
 
 
