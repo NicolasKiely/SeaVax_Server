@@ -3,7 +3,7 @@ SeaV4X
 TODO list:
 		permissions
 		Fixing crash-on-login bug (happens sooner if account login fails!), accMan Lookup?
-	Next milestone: fixing crash-on-login bug
+	Next milestone: permissions
 
 
 Pie-in-Sky List:
@@ -89,4 +89,16 @@ Account format:
 /account/<account name>/permission.txt
 	- List of permissions
 	- Format: [+ | * | -] \t [directory name | permission class if *]
-	
+
+
+Plugin API:
+  registerAPI()      - Called for registering plugin API
+  onPluginPreload()  - Called before plugin APIs are registered
+  onPluginPostLoad() - Called after plugin API is registered
+
+  
+Maze game package levels:
+  Free  ($0.00):  1 Map  allowed, Can start 1v1 games, can enter 1v1 games,  10 messages per minute, can use 10x10 maps
+  Entry ($0.99):  3 Maps allowed, Can start 1v1 games, can enter 3v3 games,  20 messages per minute, can use 20x20 maps
+  Silver($4.99): 10 Maps allowed, Can start 3v3 games, can enter 9v9 games, 120 messages per minute, can use 30x30 maps
+  Gold  ($9.99): 50 Maps allowed, Can start 9v9 games, can enter 9v9 games, 120 messages per minute, can use 50x50 maps

@@ -14,7 +14,7 @@ End Constructor
 Destructor Account()
 	this.userName = ""
 	this.pass = ""
-	If this.pNext <> 0 Then Delete this.pNext 
+	If this.pNext <> 0 Then Delete this.pNext
 End Destructor
 
 
@@ -41,6 +41,7 @@ Function Account.save() As Integer
 	
 	Print #fh, "key" + Chr(9) + "value"
 	Print #fh, "password" + Chr(9) + this.pass
+	Print #fh, "mazePackage" + Chr(9) + this.mazePack
 	
 	Close #fh
 	
@@ -160,6 +161,8 @@ Function loadSavedAccount(pAcc As Account Ptr) As Integer
 	Dim As Table Ptr pInfoTab = loadTableFromFile(infoFileName)
 	
 	pAcc->pass = pInfoTab->findValue("password")
+	pAcc->mazePack = pInfoTab->findValue("mazepackage")
+	If pAcc->mazePack = "" Then pAcc->mazePack = "entry"
 	
 	Delete pInfoTab
 	pAcc->isLoaded = -1

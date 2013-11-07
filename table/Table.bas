@@ -487,6 +487,32 @@ Function Table.findValue(key As String) As String
 End Function
 
 
+Function Table.findValue_IC(key As String) As String
+	Dim As String results = ""
+	
+	/' Loop through records '/
+	Dim As Record Ptr pTemp = this.pRec
+	While pTemp <> 0
+		/' Make sure fields exist '/
+		Dim As Fld Ptr pKeyFld = pTemp->pFld
+		Dim As Fld Ptr pValFld
+		If pKeyFld = 0 Then Continue While
+		pValFld = pKeyFld->pNext
+		If pValFld = 0 Then Continue While
+		
+		If LCase(pKeyFld->value) = LCase(key) Then
+			/' Found match '/
+			results = pValFld->value
+			Exit While
+		EndIf
+		
+		pTemp = pTemp->pNext
+	Wend
+	
+	Return results
+End Function
+
+
 Function Table.getNumberOfColumns() As Integer
 	If this.pCol = 0 Then
 		Return 0

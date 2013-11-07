@@ -65,3 +65,46 @@ Sub CMD_getMapStats(envVars As CmdEnv)
 	
 	envVars.pPipeOut = loadTableFromFile(pClient->pAcc->getPath("mazes.txt"), envVars.pPipeOut)
 End Sub
+
+
+/' Description:
+ '  Attempts to create a new map on behalf of a player
+ '
+ ' Command name:
+ '  /maze/play/newMap
+ '
+ ' Targets:
+ '  Accounts
+ '
+ ' Parameters:
+ '  Map name, Map size
+ '
+ ' Returns:
+ '  Void
+ '/
+Sub CMD_newMap(envVars As CmdEnv)
+	CAST_ENV_PARS_MACRO()
+	Dim As Record Ptr pLineErr = 0
+	
+	If pClient = 0 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdNewMap")
+		pLineErr->addField("No client attached")
+		pLineErr->addField("pClient == 0")
+		envVars.pPipeErr->addRecord(pLineErr)
+		
+		Exit Sub
+	EndIf
+	
+	If pClient->pAcc = 0 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdNewMap")
+		pLineErr->addField("Client not logged in")
+		pLineErr->addField("pClient->pAccount == 0")
+		envVars.pPipeErr->addRecord(pLineErr)
+		
+		Exit Sub
+	EndIf
+	
+	/' Look up the clients highest package '/
+End Sub

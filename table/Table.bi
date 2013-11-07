@@ -117,6 +117,9 @@ Type Table
 	/' Returns second value column for a given first-column key '/
 	Declare Function findValue(key As String) As String
 	
+	/' Returns second value column for a given first-column key. Ignores case '/
+	Declare Function findValue_IC(key As String) As String
+	
 	/' Saves table to disk '/
 	Declare Sub save(fileName As String)
 	

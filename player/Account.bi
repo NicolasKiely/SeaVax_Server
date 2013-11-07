@@ -2,7 +2,8 @@
  ' Represents a persistent user account for the given server
  ' Stored as a linked list
  ***************************************************************************'/
- 
+
+#Include Once "../table/Table.bi"
  
 #Define ACCOUNT_LIST_FILE "dat/Accounts/index.txt"
 #Define ACCOUNT_ROOT_DIR "dat/Accounts/"
@@ -20,6 +21,9 @@ Type Account
 	
 	/' Whether or not a client has logged in to account '/
 	Dim As Integer isLoggedIn
+	
+	/' Maze package '/
+	Dim As String mazePack
 	
 	/' First time account is saved. 0 returned on success '/
 	Declare Function firstSave() As Integer
