@@ -215,4 +215,7 @@ Sub CMD_newMap(envVars As CmdEnv)
 	pMazeTab->save(pClient->pAcc->getPath(MAZE_STATS_FILE_NAME))
 	Delete pMazeTab
 	
+	/' Update stats '/
+	CMD_getMapStats(envVars)
+	
 End Sub

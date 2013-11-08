@@ -304,7 +304,7 @@ Sub Server.handleClientInput(pTalker As Client Ptr, zDatIn As ZString Ptr, datLe
 	Dim As Record Ptr pErrLine
 	
 	If pStream = 0 Then
-		pErrLine = loadRecordFromString(!"Server.handleClientInput\tParsing failed")
+		pErrLine = loadRecordFromString(!"Server.handleClientInput\tParsing failed\tBug in parser")
 		pPipeErr->addRecord(pErrLine)
 	EndIf
 	
@@ -356,7 +356,7 @@ Sub Server.handleClientInput(pTalker As Client Ptr, zDatIn As ZString Ptr, datLe
 					
 					If pPipeErr->pHeader <> 0 Then
 						/' Error found '/
-						pErrLine = loadRecordFromString(!"Server.handleClientInput\tError in command")
+						pErrLine = loadRecordFromString(!"Server.handleClientInput\tError in command\tCall error")
 						pPipeErr->addRecord(pErrLine)
 						Exit While
 						
@@ -369,19 +369,19 @@ Sub Server.handleClientInput(pTalker As Client Ptr, zDatIn As ZString Ptr, datLe
 					
 				Else
 					If pCmd = 0 Then
-						pErrLine = loadRecordFromString(!"Server.handleClientInput\tCould not lookup command")
+						pErrLine = loadRecordFromString(!"Server.handleClientInput\tCould not lookup command\tNo command")
 						pPipeErr->addRecord(pErrLine)
 					EndIf
 					
 					If pCompPar = 0 Then
-						pErrLine = loadRecordFromString(!"Server.handleClientInput\tError in command")
+						pErrLine = loadRecordFromString(!"Server.handleClientInput\tError in command\tParam empty")
 						pPipeErr->addRecord(pErrLine)
 					EndIf
 					Exit While
 				EndIf
 				
 			Case CommandStreamStrings.PARAMETER_STRING:
-				pErrLine = loadRecordFromString(!"Server.handleClientInput\tBug: split parameter string")
+				pErrLine = loadRecordFromString(!"Server.handleClientInput\tBug: split parameter string\tNot sure")
 				pPipeErr->addRecord(pErrLine)
 				Exit While
 				

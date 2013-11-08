@@ -1,9 +1,9 @@
 SeaV4X
 
 TODO list:
+		Create map data structures and files
 		permissions
 		Fixing crash-on-login bug (happens sooner if account login fails!), accMan Lookup?
-		Maze game create new map
 	Next milestone: permissions
 
 
@@ -39,14 +39,13 @@ User structures:
 	Account - Persistent storage of user data, bound to permissions. Permissions
 		are per command or per domain (recursive include)
 	Client  - A connected user.
-	Player  - Storage of a user's game data, lasts per game.
 
 	Parent -> *child
 	-----------------
 	Client -> *account
 	Account -> *player
 	
-	Server keeps list of accounts, clients, teams, and players
+	Server keeps list of accounts and clients
 	
 Permissions:
 	- Per account, default is no permission
@@ -59,11 +58,11 @@ In game player structure:
 
 
 Server response format:
-Title \n
-Col   1 \t Col   2 \t Col   3 . . . \t \n
+Header \n
+Col   1 \t Col   2 \t Col   3 . . . \t  \n
 val   1 \t val   2 \t val   3 . . . \t
 val n+1 \t val n+2 \t val n+3 . . . \t
-...
+... \n
 
 
 Server command function parameters:
