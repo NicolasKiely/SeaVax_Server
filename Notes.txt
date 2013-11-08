@@ -3,6 +3,7 @@ SeaV4X
 TODO list:
 		permissions
 		Fixing crash-on-login bug (happens sooner if account login fails!), accMan Lookup?
+		Maze game create new map
 	Next milestone: permissions
 
 

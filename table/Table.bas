@@ -90,7 +90,7 @@ End Function
 
 Function Record.getFieldByID(colID As Integer) As Fld Ptr
 	Dim As fld Ptr pRet
-	Dim As Integer i
+	Dim As Integer i = 0
 	
 	/' Catch lower-bound error '/
 	If colID < 0 Then Return 0
@@ -453,7 +453,7 @@ Sub Table.save(fileName As String)
 	
 	Dim As Record Ptr pRs = this.pRec
 	While pRs <> 0
-		Print #fh, pRs->pFld->rToString(Str(9))
+		Print #fh, pRs->pFld->rToString(Chr(9))
 		pRs = pRs->pNext
 	Wend
 	
@@ -519,4 +519,36 @@ Function Table.getNumberOfColumns() As Integer
 	Else
 		Return this.pCol->getNumberOfFields()
 	EndIf
+End Function
+
+
+Function Table.getRecordByField(value As String, colName As String) As Record Ptr
+	Dim As Integer colIndex = this.getColumnID(colName)
+	If colIndex < 0 Then Return 0
+	
+	/' Loop though records '/
+	Dim As Record Ptr pRecTemp = this.pRec
+	While pRecTemp <> 0
+		/' Loop through fields of record '/
+		Dim As Integer i = 0
+		Dim As Fld Ptr pTempFld = pRecTemp->pFld
+		While pTempFld<>0
+			If i = colIndex Then
+				/' Check field value '/
+				If pTempFld->value = value Then
+					Return pRecTemp
+				Else
+					/' Done checking field '/
+					Exit While
+				EndIf
+			EndIf
+			
+			i += 1
+			pTempFld = pTempFld->pNext
+		Wend
+		
+		pRecTemp = pRecTemp->pNext
+	Wend
+	
+	Return 0
 End Function

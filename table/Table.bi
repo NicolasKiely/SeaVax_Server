@@ -63,7 +63,7 @@ Type Record
 	/' Adds field to record. Returns 0 on success '/
 	Declare Function addField(text As String) As Integer
 	
-	/' Returns pointer to field by column id '/
+	/' Returns pointer to field by column id. 0 if not found '/
 	Declare Function getFieldByID(colID As Integer) As Fld Ptr
 	
 	/' Dont make recursive to-string function, could overflow stack '/
@@ -110,7 +110,7 @@ Type Table
 	/' Returns a formatted string representation of the table '/
 	Declare Function toPrettyString() As String
 	
-	/' Gets column ID from name. IC = ignore case '/
+	/' Gets column ID from name, -1 if not found. IC = ignore case '/
 	Declare Function getColumnID(columnName As String) As Integer
 	Declare Function getColumnID_IC(columnName As String) As Integer
 	
@@ -119,6 +119,10 @@ Type Table
 	
 	/' Returns second value column for a given first-column key. Ignores case '/
 	Declare Function findValue_IC(key As String) As String
+	
+	/' Returns first record that has a given field value under
+	  the specified column. Null if not found '/
+	Declare Function getRecordByField(value As String, colName As String) As Record Ptr
 	
 	/' Saves table to disk '/
 	Declare Sub save(fileName As String)

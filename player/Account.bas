@@ -58,6 +58,32 @@ Function Account.getPath(appendPath As String = "") As String
 End Function
 
 
+Function Account.getMazePackage() As String
+	Dim As String lMazePack = LCase(this.mazePack)
+	
+	If lMazePack = "free" Then
+		this.mazePack = "Free"
+		Return "Free"
+		
+	ElseIf lMazePack = "entry" Then
+		this.mazePack = "Entry"
+		Return "Entry"
+		
+	ElseIf lMazePack = "silver" Then
+		this.mazePack = "Silver"
+		Return "Silver"
+		
+	ElseIf lMazePack = "gold" Then
+		this.mazePack = "Gold"
+		Return "Gold"
+		
+	Else
+		this.mazePack = "Free"
+		Return "Free"
+	EndIf
+End Function
+
+
 Constructor AccountManager()
 	this.pAcc = 0
 End Constructor
@@ -161,8 +187,8 @@ Function loadSavedAccount(pAcc As Account Ptr) As Integer
 	Dim As Table Ptr pInfoTab = loadTableFromFile(infoFileName)
 	
 	pAcc->pass = pInfoTab->findValue("password")
-	pAcc->mazePack = pInfoTab->findValue("mazepackage")
-	If pAcc->mazePack = "" Then pAcc->mazePack = "entry"
+	pAcc->mazePack = pInfoTab->findValue("mazePackage")
+	If pAcc->mazePack = "" Then pAcc->mazePack = "Free"
 	
 	Delete pInfoTab
 	pAcc->isLoaded = -1

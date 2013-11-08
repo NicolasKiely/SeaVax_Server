@@ -14,3 +14,4 @@ id	name	domain	info
 13	info	/dat	Lists info of a directory or command
 14	lsf	/dat	Lists flag info of a command
 15	mapStats	/maze/play	Loads account's maps and map info
+16	newMap	/maze/play	Attempts to create a new map for an account

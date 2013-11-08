@@ -37,6 +37,11 @@ Type Account
 	/' Returns path to account directory '/
 	Declare Function getPath(appendPath As String = "") As String
 	
+	/' Returns maze pack. Normalizes to capital casing to avoid
+	 ' internal server inconsistencies
+	 '/
+	Declare Function getMazePackage() As String
+	
 	Declare Constructor()
 	Declare Destructor()
 End Type
