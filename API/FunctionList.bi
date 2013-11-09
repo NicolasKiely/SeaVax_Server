@@ -52,7 +52,7 @@
 		{@CMD_getProtocolVersion, @CMD_getServerVersion, @CMD_getModVersion, @CMD_stopServer, @CMD_listDirectory, _
 		@CMD_tableColumns, @CMD_chatMessage, @CMD_clientLogin, @CMD_clientChangePassword, @CMD_manCreateAccount, _
 		@CMD_listAccounts, @CMD_clientLogout, @CMD_directoryInfo, @CMD_flagInfo, @CMD_getMapStats, _
-		@CMD_newMap}
+		@CMD_newMap, @CMD_mapStageSwap}
 #EndMacro
 
 
@@ -73,3 +73,4 @@ DECLARE_CMD_SUB(directoryInfo)            ' 13
 DECLARE_CMD_SUB(flagInfo)                 ' 14
 DECLARE_CMD_SUB(getMapStats)              ' 15
 DECLARE_CMD_SUB(newMap)                   ' 16
+DECLARE_CMD_SUB(mapStageSwap)             ' 17

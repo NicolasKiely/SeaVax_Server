@@ -82,7 +82,7 @@ End Sub
  '  Map name, Map size
  '
  ' Returns:
- '  Void
+ '  Map stats update
  '/
 Sub CMD_newMap(envVars As CmdEnv)
 	CAST_ENV_PARS_MACRO()
@@ -218,4 +218,93 @@ Sub CMD_newMap(envVars As CmdEnv)
 	/' Update stats '/
 	CMD_getMapStats(envVars)
 	
+End Sub
+
+
+/' Description:
+ '  Attempts to swap the public/private state of a maze
+ '
+ ' Command name:
+ '  /maze/play/swapStage
+ '
+ ' Targets:
+ '  Accounts
+ '
+ ' Parameters:
+ '  Map id, Map stage
+ '
+ ' Returns:
+ '  Map stats update
+ '/
+Sub CMD_mapStageSwap(envVars As CmdEnv)
+	CAST_ENV_PARS_MACRO()
+	Dim As Record Ptr pLineErr = 0
+	
+	If pClient = 0 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdMapStageSwap")
+		pLineErr->addField("No client attached")
+		pLineErr->addField("pClient == 0")
+		envVars.pPipeErr->addRecord(pLineErr)
+		
+		Exit Sub
+	EndIf
+	
+	If pClient->pAcc = 0 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdMapStageSwap")
+		pLineErr->addField("Client not logged in")
+		pLineErr->addField("pClient->pAccount == 0")
+		envVars.pPipeErr->addRecord(pLineErr)
+		
+		Exit Sub
+	EndIf
+	
+	Dim As Param Ptr prmID = envVars.pParam->popParam("id", "i")
+	Dim As String id = prmID->pVals->text
+	Delete prmID
+	
+	Dim As Param Ptr prmState = envVars.pParam->popParam("stage", "s")
+	Dim As String stage = ""
+	If prmState <> 0 Then
+		stage = prmState->pVals->text
+		Delete prmState
+	End If
+	
+	/' Load up maze table from disk '/
+	Dim As Table Ptr pMazeTab = loadMazeStats(pClient->pAcc)
+	
+	/' Look up specific record '/
+	Dim As Record Ptr pRec = pMazeTab->getRecordByField(prmID->pVals->text, MAZE_ID_HEADER)
+	If pRec = 0 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdMapStageSwap")
+		pLineErr->addField("Maze ID not found")
+		pLineErr->addField("pRec = 0 for id=" + Str(prmID->pVals->text))
+		envVars.pPipeErr->addRecord(pLineErr)
+		
+		Delete pMazeTab
+		Exit Sub
+	EndIf
+	
+	/' Look up field in table '/
+	Dim As Integer colIndex = pMazeTab->getColumnID(MAZE_STAGED_HEADER)
+	Dim As Fld Ptr pFld = pRec->getFieldByID(colIndex)
+	
+	If stage <> "1" And stage <> "0" Then
+		/' Load stage value '/
+		Dim As Integer flippedStage = ValInt(pFld->value)
+		If flippedStage = 0 Then stage = "0" Else stage = "1"
+	EndIf
+	
+	/' Flip stage value '/
+	If stage = "0" Then stage = "1" Else stage = "0"
+	
+	/' Set field and save '/
+	pFld->value = stage
+	pMazeTab->save(pClient->pAcc->getPath(MAZE_STATS_FILE_NAME))
+	Delete pMazeTab
+	
+	/' Update stats '/
+	CMD_getMapStats(envVars)
 End Sub
