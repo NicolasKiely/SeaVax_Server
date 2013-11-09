@@ -275,12 +275,12 @@ Sub CMD_mapStageSwap(envVars As CmdEnv)
 	Dim As Table Ptr pMazeTab = loadMazeStats(pClient->pAcc)
 	
 	/' Look up specific record '/
-	Dim As Record Ptr pRec = pMazeTab->getRecordByField(prmID->pVals->text, MAZE_ID_HEADER)
+	Dim As Record Ptr pRec = pMazeTab->getRecordByField(id, MAZE_ID_HEADER)
 	If pRec = 0 Then
 		pLineErr = New Record()
 		pLineErr->addField("CmdMapStageSwap")
 		pLineErr->addField("Maze ID not found")
-		pLineErr->addField("pRec = 0 for id=" + Str(prmID->pVals->text))
+		pLineErr->addField("pRec = 0 for id=" + Str(ids))
 		envVars.pPipeErr->addRecord(pLineErr)
 		
 		Delete pMazeTab
