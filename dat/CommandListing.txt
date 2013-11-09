@@ -16,3 +16,4 @@ id	name	domain	info
 15	mapStats	/maze/play	Loads account's maps and map info
 16	newMap	/maze/play	Attempts to create a new map for an account
 17	swapStage	/maze/play	Switches a maze between being private 1 and public 0.
+18	deleteMap	/maze/play	Deletes a player's map

@@ -124,6 +124,9 @@ Type Table
 	  the specified column. Null if not found '/
 	Declare Function getRecordByField(value As String, colName As String) As Record Ptr
 	
+	/' Removes a record by a give field value '/
+	Declare Sub removeRecordByField(value As String, colName As String)
+	
 	/' Saves table to disk '/
 	Declare Sub save(fileName As String)
 	

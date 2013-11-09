@@ -552,3 +552,51 @@ Function Table.getRecordByField(value As String, colName As String) As Record Pt
 	
 	Return 0
 End Function
+
+
+Sub Table.removeRecordByField(value As String, colName As String)
+	Dim As Integer colIndex = this.getColumnID(colName)
+	If colIndex < 0 Then Exit Sub
+	
+	/' Loop though records '/
+	Dim As Record Ptr pCurRec = this.pRec
+	Dim As Record Ptr pPrevRec = 0
+	
+	While pCurRec <> 0
+		/' Lookup field '/
+		Dim As Fld Ptr pFld = pCurRec->getFieldByID(colIndex)
+		If pFld->value = value Then
+			/' Delete this record '/
+			If pPrevRec = 0 Then
+				/' First record in table, push table pointer forward '/
+				this.pRec = pCurRec->pNext
+				
+				/' Delete old record '/
+				pCurRec->pNext = 0
+				Delete pCurRec
+				
+				/' Push current record tracker to first table pointer '/
+				pCurRec = this.pRec
+				Continue While
+			
+			Else
+				/' Deleting middle record. Redirect previous node '/
+				pPrevRec->pNext = pCurRec->pNext
+				
+				/' Delete old record '/
+				pCurRec->pNext = 0
+				Delete pCurRec
+				
+				/' Push current record tracker to next record '/
+				pCurRec = pPrevRec->pNext
+				Continue While
+			EndIf
+			
+		EndIf
+		
+		
+		/' Loop to next record '/
+		pPrevRec = pCurRec
+		pCurRec = pCurRec->pNext
+	Wend
+End Sub

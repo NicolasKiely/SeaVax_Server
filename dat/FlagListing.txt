@@ -12,5 +12,6 @@ room	r	/chat/msg	1	1	1	1	Chat room for message
 message	m	/chat/msg	1	1	1	1	Message to say
 name	n	/maze/play/newMap	1	1	1	1	Name of map
 size	s	/maze/play/newMap	1	1	1	1	Length of map side. Maps are square
-id	i	/maze/play/swapStage	1	1	1	1	ID of map
+id	i	/maze/play/swapStage	1	1	1	1	ID of map to affect
 stage	i	/maze/play/swapStage	1	1	0	1	Force the map to switch to that stage
+id	i	/maze/play/deleteMap	1	1	1	1	ID of map to delete

@@ -280,7 +280,7 @@ Sub CMD_mapStageSwap(envVars As CmdEnv)
 		pLineErr = New Record()
 		pLineErr->addField("CmdMapStageSwap")
 		pLineErr->addField("Maze ID not found")
-		pLineErr->addField("pRec = 0 for id=" + Str(ids))
+		pLineErr->addField("pRec = 0 for id=" + Str(id))
 		envVars.pPipeErr->addRecord(pLineErr)
 		
 		Delete pMazeTab
@@ -302,6 +302,75 @@ Sub CMD_mapStageSwap(envVars As CmdEnv)
 	
 	/' Set field and save '/
 	pFld->value = stage
+	pMazeTab->save(pClient->pAcc->getPath(MAZE_STATS_FILE_NAME))
+	Delete pMazeTab
+	
+	/' Update stats '/
+	CMD_getMapStats(envVars)
+End Sub
+
+
+/' Description:
+ '  Attempts to delete a player's map
+ '
+ ' Command name:
+ '  /maze/play/deleteMap
+ '
+ ' Targets:
+ '  Accounts
+ '
+ ' Parameters:
+ '  Map id
+ '
+ ' Returns:
+ '  Map stats update
+ '/
+Sub CMD_deleteMaze(envVars As CmdEnv)
+	CAST_ENV_PARS_MACRO()
+	Dim As Record Ptr pLineErr = 0
+	
+	If pClient = 0 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdMapStageSwap")
+		pLineErr->addField("No client attached")
+		pLineErr->addField("pClient == 0")
+		envVars.pPipeErr->addRecord(pLineErr)
+		
+		Exit Sub
+	EndIf
+	
+	If pClient->pAcc = 0 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdMapStageSwap")
+		pLineErr->addField("Client not logged in")
+		pLineErr->addField("pClient->pAccount == 0")
+		envVars.pPipeErr->addRecord(pLineErr)
+		
+		Exit Sub
+	EndIf
+	
+	Dim As Param Ptr prmID = envVars.pParam->popParam("id", "i")
+	Dim As String id = prmID->pVals->text
+	Delete prmID
+	
+	/' Load up maze table from disk '/
+	Dim As Table Ptr pMazeTab = loadMazeStats(pClient->pAcc)
+	
+	
+	/' Remove specific record '/
+	pMazeTab->removeRecordByField(id, MAZE_ID_HEADER)
+	/'If pRec = 0 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdDeleteMaze")
+		pLineErr->addField("Maze ID not found")
+		pLineErr->addField("pRec = 0 for id=" + Str(id))
+		envVars.pPipeErr->addRecord(pLineErr)
+		
+		Delete pMazeTab
+		Exit Sub
+	EndIf '/
+	
+	/' Save modified table and update client '/
 	pMazeTab->save(pClient->pAcc->getPath(MAZE_STATS_FILE_NAME))
 	Delete pMazeTab
 	
