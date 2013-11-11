@@ -151,6 +151,8 @@ Sub Server.handleReadSocks(pReadSet As fd_set Ptr)
 	Dim As ZString Ptr pBuf = Callocate(250)
 		
 	If FD_ISSET(this.sock_l, pReadSet) Then
+		'Print "Connection Attempt!"
+		
 		/' New client trying to connect '/
 		Dim As Client Ptr pNewClient
 		Dim As Integer size = SizeOf(pNewClient->addr)

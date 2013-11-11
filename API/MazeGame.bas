@@ -212,6 +212,8 @@ Sub CMD_newMap(envVars As CmdEnv)
 	pNewMazeRecord->addField("1")            /' Staged '/
 	pMazeTab->addRecord(pNewMazeRecord)
 	
+	
+	initializeMazeFile(pClient->pAcc, freeIndex, size)
 	pMazeTab->save(pClient->pAcc->getPath(MAZE_STATS_FILE_NAME))
 	Delete pMazeTab
 	
@@ -356,19 +358,8 @@ Sub CMD_deleteMaze(envVars As CmdEnv)
 	/' Load up maze table from disk '/
 	Dim As Table Ptr pMazeTab = loadMazeStats(pClient->pAcc)
 	
-	
 	/' Remove specific record '/
 	pMazeTab->removeRecordByField(id, MAZE_ID_HEADER)
-	/'If pRec = 0 Then
-		pLineErr = New Record()
-		pLineErr->addField("CmdDeleteMaze")
-		pLineErr->addField("Maze ID not found")
-		pLineErr->addField("pRec = 0 for id=" + Str(id))
-		envVars.pPipeErr->addRecord(pLineErr)
-		
-		Delete pMazeTab
-		Exit Sub
-	EndIf '/
 	
 	/' Save modified table and update client '/
 	pMazeTab->save(pClient->pAcc->getPath(MAZE_STATS_FILE_NAME))

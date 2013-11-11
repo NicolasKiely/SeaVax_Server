@@ -24,6 +24,13 @@
 #Define MAZE_STAGED_HEADER "Staged"
 
 
+#Define MAZE_TILE_PASSABLE   "p"
+#Define MAZE_TILE_IMPASSABLE "i"
+#Define MAZE_TILE_START      "s"
+#Define MAZE_TILE_FINISH     "f"
+#Define MAZE_TILE_TRAP       "t"
+
+
 Type MazeManager
 	Dim As Integer foo
 	
@@ -48,3 +55,7 @@ Declare Function getMaxMazeSize(package As String) As Integer
 
 /' Returns -1 if allowed name, ascii value if not ( >-1 )'/
 Declare Function isAllowedMazeName(mazeName As String) As Integer
+
+
+/' Creates a new maze file '/
+Declare Sub initializeMazeFile(pAcc As Account ptr, id As Integer, size As Integer)

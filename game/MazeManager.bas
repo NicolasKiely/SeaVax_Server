@@ -101,3 +101,28 @@ Function getFreeMazeIndex(pMazeTab As Table Ptr) As Integer
 	
 	Return loIndex
 End Function
+
+
+Sub initializeMazeFile(pAcc As Account ptr, id As Integer, size As Integer)
+	If (pAcc = 0) Or (id < 0) Or (size < 10) Then Exit Sub
+	
+	/' Figure out path name for maze '/
+	Dim As String path = pAcc->getPath("maze_" + Str(id) + ".txt")
+	
+	/' Open maze file '/
+	Dim As Integer fh = FreeFile()
+	Open path For Output As #fh
+	
+	/' Print empty map '/
+	For y As Integer = 0 To size-1
+		For x As Integer = 0 To size-1
+			If x < size-1 Then
+				Print #fh, MAZE_TILE_PASSABLE;
+			Else
+				Print #fh, MAZE_TILE_PASSABLE
+			EndIf
+		Next
+	Next
+	
+	Close #fh
+End Sub
