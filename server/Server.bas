@@ -21,6 +21,7 @@ End Destructor
 
 Sub Server.initSock()
 	/' Needed for initializing '/
+	this.sockBuf = Callocate(SERVER_READ_BUFFER_SIZE)
 	
 	If WSAStartup(MAKEWORD(2,2), @this.wdat) <> 0 Then
 		Print "Error in calling WSAstartup(1,1,@)"
@@ -73,13 +74,13 @@ Sub Server.serverMain()
 	While this.shutDown = 0
 		Dim As Double loopTime = Timer
 		
-		tick += 1
-		If tick >= 200 Then
+		'tick += 1
+		/'If tick >= 200 Then
 			Print "Tick"
 			Print "Client count: " + Str(this.getClientCount())
 			tick = 0
 		EndIf
-		
+		'/
 		/' Work '/
 		
 		/' Check for client input '/
@@ -148,8 +149,8 @@ End Sub
 
 
 Sub Server.handleReadSocks(pReadSet As fd_set Ptr)
-	Dim As ZString Ptr pBuf = Callocate(250)
-		
+	Clear(*this.sockBuf, 0, SERVER_READ_BUFFER_SIZE)
+	
 	If FD_ISSET(this.sock_l, pReadSet) Then
 		'Print "Connection Attempt!"
 		
@@ -191,9 +192,9 @@ Sub Server.handleReadSocks(pReadSet As fd_set Ptr)
 	While pCurrent <> 0
 		If FD_ISSET(pCurrent->sock, pReadSet) Then
 			/' input!!!!! '/
-			Dim As Integer datLen = recv(pCurrent->sock, pBuf, 249, 0)
+			Dim As Integer datLen = recv(pCurrent->sock, this.sockBuf, 249, 0)
 			If datLen >= 248 Then Print "Weirdness going on in packets"
-			pBuf[249] = 0
+			this.sockBuf[249] = 0
 			
 			If datLen = 0 Or datLen = -1 Then
 				/' Closed connection, remove '/
@@ -201,8 +202,8 @@ Sub Server.handleReadSocks(pReadSet As fd_set Ptr)
 				pCurrent->markForDeletion = 1
 			
 			Else
-				pBuf[datLen] = 0
-				handleClientInput(pCurrent, pBuf, datLen)
+				this.sockBuf[datLen] = 0
+				handleClientInput(pCurrent, this.sockBuf, datLen)
 			EndIf
 			
 		Else

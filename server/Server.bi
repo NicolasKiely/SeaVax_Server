@@ -7,6 +7,9 @@
 #Include Once "../chatroom/ChatRoom.bi"
 
 
+#Define SERVER_READ_BUFFER_SIZE 250
+
+
 /'****************************************************************************
  ' Servers primary data structure
  ***************************************************************************'/
@@ -30,6 +33,9 @@ Type Server
 	
 	/' Main lobby '/
 	Dim As ChatRoom lobby
+	
+	/' Buffer for reading socket '/
+	Dim As ZString Ptr sockBuf
 	
 	
 	Declare Constructor()

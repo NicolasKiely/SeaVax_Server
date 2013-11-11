@@ -368,3 +368,44 @@ Sub CMD_deleteMaze(envVars As CmdEnv)
 	/' Update stats '/
 	CMD_getMapStats(envVars)
 End Sub
+
+
+/' Description:
+ '  Retrieves maze data
+ '
+ ' Command name:
+ '  /maze/play/getMaze
+ '
+ ' Targets:
+ '  Accounts
+ '
+ ' Parameters:
+ '		id
+ '
+ ' Returns:
+ ' - Maze data
+ '/
+Sub CMD_getMaze(envVars As CmdEnv)
+	CAST_ENV_PARS_MACRO()
+	Dim As Record Ptr pLineErr = 0
+	
+	If pClient = 0 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdGetMapStats")
+		pLineErr->addField("No client attached")
+		pLineErr->addField("pClient == 0")
+		envVars.pPipeErr->addRecord(pLineErr)
+		
+		Exit Sub
+	EndIf
+	
+	If pClient->pAcc = 0 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdGetMapStats")
+		pLineErr->addField("Client not logged in")
+		pLineErr->addField("pClient->pAccount == 0")
+		envVars.pPipeErr->addRecord(pLineErr)
+		
+		Exit Sub
+	EndIf
+End Sub 

@@ -31,63 +31,64 @@
 #Include Once "cmds/ParList.bi"
 
 /' Included because image generation wont work otherwise '/
-ScreenRes 640, 480, 32
+'ScreenRes 640, 480, 32
 
-
+/'
 Dim As String param1 = ""   ' Command line arg
 Dim As String param2 = ""   ' Command line arg
 Dim As String world  = ""   ' World name
 Dim As String worldSav = "" ' World save name
 Dim As String worldRaw = "" ' World generation name
 Dim As Integer forceReload = 0 ' Whether or not to ignore existing save
+'/
 Dim As Server serv
 
 
 /' Get the first two command line args '/
-param1 = Command(1)
-param2 = Command(2)
+'param1 = Command(1)
+'param2 = Command(2)
 
-If param1 = "" Then
+'If param1 = "" Then
 	/' Use default world '/
-	world = "world"
+'	world = "world"
 
-Else
-	If param2 = "" Then
+'Else
+'	If param2 = "" Then
 		/' Use first arg as world name '/
-		world = param1
+'		world = param1
 		
-	ElseIf param1 = "-r" Then
+'	ElseIf param1 = "-r" Then
 		/' Use second arg as world name, and set flag '/
-		world = param2
-		forceReload = -1
+'		world = param2
+'		forceReload = -1
 		
-	Else
+'	Else
 		/' Bad arguments '/
-		Print "Error, bad arguments."
-		Print "Usage: server.exe [-r] world name"
-		Sleep
-		End(1)
+'		Print "Error, bad arguments."
+'		Print "Usage: server.exe [-r] world name"
+'		Sleep
+'		End(1)
 		
-	EndIf
-EndIf
+'	EndIf
+'EndIf
 
 
 /' Get world save and generator names '/
-worldSav = world + ".sav"
-worldRaw = world + ".raw"
+'worldSav = world + ".sav"
+'worldRaw = world + ".raw"
 
 
-If FileExists("saves/" + worldRaw) = 0 Then
+'If FileExists("saves/" + worldRaw) = 0 Then
 	/' File does not exist. Generate raw world file '/
-	Dim As String errorStr = generateWorld(worldRaw)
-	
+'	Dim As String errorStr = generateWorld(worldRaw)
+/'
 	If (errorStr <> "") then 
 		Print "Error in world generation:"
 		Print "   " + errorStr
 	EndIf
 	
-EndIf
-
+EndIf 
+'/
 
 /' Move back to console '/
 'Screen 0
