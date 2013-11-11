@@ -15,3 +15,4 @@ size	s	/maze/play/newMap	1	1	1	1	Length of map side. Maps are square
 id	i	/maze/play/swapStage	1	1	1	1	ID of map to affect
 stage	i	/maze/play/swapStage	1	1	0	1	Force the map to switch to that stage
 id	i	/maze/play/deleteMap	1	1	1	1	ID of map to delete
+id	i	/maze/play/getMaze	1	1	1	1	ID of maze to retrieve

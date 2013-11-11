@@ -126,3 +126,40 @@ Sub initializeMazeFile(pAcc As Account ptr, id As Integer, size As Integer)
 	
 	Close #fh
 End Sub
+
+
+
+Sub loadMazeAsTable(fileName As String, pTable As Table Ptr)
+	Dim As Integer fh = FreeFile()
+	Open fileName For Input As #fh
+	If Err = 2 Or Err = 3 Then Exit Sub
+	Dim As Integer counter = 0
+	
+	
+	Do Until Eof(fh)
+		Dim As String fileLine
+		Line Input #fh, fileLine
+		
+		If fileLine = "" Then Continue Do
+		
+		/' Load line into record '/
+		Dim As Record Ptr pRec = New Record()
+		For i As Integer = 0 To Len(fileLine)-1
+			pRec->addField(Chr(fileLine[i]))
+			
+			If counter >= 0 Then
+				/' Build column header with first line '/
+				pTable->addToColumn(Str(counter))
+				counter += 1
+			EndIf
+		Next
+		
+		/' Disable adding to columns '/
+		counter = -1
+		
+		/' Add record to table '/
+		pTable->addRecord(pRec)
+	Loop
+	
+	Close #fh
+End Sub

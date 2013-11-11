@@ -314,29 +314,15 @@ End Sub
  ' - Maze data
  '/
 Sub CMD_getMaze(envVars As CmdEnv)
-	CAST_ENV_PARS_MACRO()
 	Dim As Record Ptr pLineErr = 0
+	CAST_ENV_PARS_MACRO()
+	ASSERT_NONNULL_CLIENT("CmdGetMaze")
+	ASSERT_NONNULL_ACCOUNT("CmdGetMaze")
 	
-	If pClient = 0 Then
-		pLineErr = New Record()
-		pLineErr->addField("CmdGetMapStats")
-		pLineErr->addField("No client attached")
-		pLineErr->addField("pClient == 0")
-		envVars.pPipeErr->addRecord(pLineErr)
-		
-		Exit Sub
-	EndIf
+	/' Lookup ID to retrieve '/
+	Dim As Param Ptr prmID = envVars.pParam->popParam("id", "i")
+	Dim As String id = prmID->pVals->text
+	Delete prmID
 	
-	If pClient->pAcc = 0 Then
-		pLineErr = New Record()
-		pLineErr->addField("CmdGetMapStats")
-		pLineErr->addField("Client not logged in")
-		pLineErr->addField("pClient->pAccount == 0")
-		envVars.pPipeErr->addRecord(pLineErr)
-		
-		Exit Sub
-	EndIf
-	
-	/' Get stats '/
-	Dim As Table Ptr pStatsTab = loadMazeStats(pClient->pAcc)
+	loadMazeAsTable(pClient->pAcc->getPath("maze_"+id+".txt"), envVars.pPipeOut)
 End Sub 
