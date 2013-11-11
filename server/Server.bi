@@ -1,4 +1,3 @@
-'#Include Once "../player/Organization.bi"
 #Include Once "../player/Account.bi"
 #Include Once "win/winsock.bi"
 #Include Once "../player/Client.bi"

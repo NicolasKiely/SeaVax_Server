@@ -8,6 +8,35 @@
 #EndMacro
 
 
+/' For convieniently exiting on null client error '/
+#Macro ASSERT_NONNULL_CLIENT(SOURCE_PAR)
+	If pClient = 0 Then
+		pLineErr = New Record()
+		pLineErr->addField(SOURCE_PAR)
+		pLineErr->addField("No client attached")
+		pLineErr->addField("pClient == 0")
+		envVars.pPipeErr->addRecord(pLineErr)
+		
+		Exit Sub
+	EndIf
+#EndMacro
+
+
+/' For convieniently exiting on null account error '/
+#Macro ASSERT_NONNULL_ACCOUNT(SOURCE_PAR)
+	If pClient->pAcc = 0 Then
+		pLineErr = New Record()
+		pLineErr->addField(SOURCE_PAR)
+		pLineErr->addField("Client not logged in")
+		pLineErr->addField("pClient->pAccount == 0")
+		envVars.pPipeErr->addRecord(pLineErr)
+		
+		Exit Sub
+	EndIf
+#EndMacro
+
+
+
 /'----------------------------------------------------------------------------
  ' Environmental parameters for a command call
  ---------------------------------------------------------------------------'/

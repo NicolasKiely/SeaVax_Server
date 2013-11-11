@@ -19,28 +19,10 @@
  ' - Map ID, map name, map size, map wins, map plays
  '/
 Sub CMD_getMapStats(envVars As CmdEnv)
-	CAST_ENV_PARS_MACRO()
 	Dim As Record Ptr pLineErr = 0
-	
-	If pClient = 0 Then
-		pLineErr = New Record()
-		pLineErr->addField("CmdGetMapStats")
-		pLineErr->addField("No client attached")
-		pLineErr->addField("pClient == 0")
-		envVars.pPipeErr->addRecord(pLineErr)
-		
-		Exit Sub
-	EndIf
-	
-	If pClient->pAcc = 0 Then
-		pLineErr = New Record()
-		pLineErr->addField("CmdGetMapStats")
-		pLineErr->addField("Client not logged in")
-		pLineErr->addField("pClient->pAccount == 0")
-		envVars.pPipeErr->addRecord(pLineErr)
-		
-		Exit Sub
-	EndIf
+	CAST_ENV_PARS_MACRO()
+	ASSERT_NONNULL_CLIENT("CmdGetMapStats")
+	ASSERT_NONNULL_ACCOUNT("CmdGetMapStats")
 	
 	/' Open index file '/
 	Dim As Integer fh = FreeFile()
@@ -85,28 +67,10 @@ End Sub
  '  Map stats update
  '/
 Sub CMD_newMap(envVars As CmdEnv)
-	CAST_ENV_PARS_MACRO()
 	Dim As Record Ptr pLineErr = 0
-	
-	If pClient = 0 Then
-		pLineErr = New Record()
-		pLineErr->addField("CmdNewMap")
-		pLineErr->addField("No client attached")
-		pLineErr->addField("pClient == 0")
-		envVars.pPipeErr->addRecord(pLineErr)
-		
-		Exit Sub
-	EndIf
-	
-	If pClient->pAcc = 0 Then
-		pLineErr = New Record()
-		pLineErr->addField("CmdNewMap")
-		pLineErr->addField("Client not logged in")
-		pLineErr->addField("pClient->pAccount == 0")
-		envVars.pPipeErr->addRecord(pLineErr)
-		
-		Exit Sub
-	EndIf
+	CAST_ENV_PARS_MACRO()
+	ASSERT_NONNULL_CLIENT("CmdNewMap")
+	ASSERT_NONNULL_ACCOUNT("CmdNewMap")
 	
 	/' Load up accounts existing maze records. TODO: delete maze table '/
 	Dim As Table Ptr pMazeTab = loadMazeStats(pClient->pAcc)
@@ -219,7 +183,6 @@ Sub CMD_newMap(envVars As CmdEnv)
 	
 	/' Update stats '/
 	CMD_getMapStats(envVars)
-	
 End Sub
 
 
@@ -239,28 +202,11 @@ End Sub
  '  Map stats update
  '/
 Sub CMD_mapStageSwap(envVars As CmdEnv)
-	CAST_ENV_PARS_MACRO()
 	Dim As Record Ptr pLineErr = 0
+	CAST_ENV_PARS_MACRO()
+	ASSERT_NONNULL_CLIENT("CmdMapStageSwap")
+	ASSERT_NONNULL_ACCOUNT("CmdMapStageSwap")
 	
-	If pClient = 0 Then
-		pLineErr = New Record()
-		pLineErr->addField("CmdMapStageSwap")
-		pLineErr->addField("No client attached")
-		pLineErr->addField("pClient == 0")
-		envVars.pPipeErr->addRecord(pLineErr)
-		
-		Exit Sub
-	EndIf
-	
-	If pClient->pAcc = 0 Then
-		pLineErr = New Record()
-		pLineErr->addField("CmdMapStageSwap")
-		pLineErr->addField("Client not logged in")
-		pLineErr->addField("pClient->pAccount == 0")
-		envVars.pPipeErr->addRecord(pLineErr)
-		
-		Exit Sub
-	EndIf
 	
 	Dim As Param Ptr prmID = envVars.pParam->popParam("id", "i")
 	Dim As String id = prmID->pVals->text
@@ -328,28 +274,10 @@ End Sub
  '  Map stats update
  '/
 Sub CMD_deleteMaze(envVars As CmdEnv)
-	CAST_ENV_PARS_MACRO()
 	Dim As Record Ptr pLineErr = 0
-	
-	If pClient = 0 Then
-		pLineErr = New Record()
-		pLineErr->addField("CmdMapStageSwap")
-		pLineErr->addField("No client attached")
-		pLineErr->addField("pClient == 0")
-		envVars.pPipeErr->addRecord(pLineErr)
-		
-		Exit Sub
-	EndIf
-	
-	If pClient->pAcc = 0 Then
-		pLineErr = New Record()
-		pLineErr->addField("CmdMapStageSwap")
-		pLineErr->addField("Client not logged in")
-		pLineErr->addField("pClient->pAccount == 0")
-		envVars.pPipeErr->addRecord(pLineErr)
-		
-		Exit Sub
-	EndIf
+	CAST_ENV_PARS_MACRO()
+	ASSERT_NONNULL_CLIENT("CmdDeleteMaze")
+	ASSERT_NONNULL_ACCOUNT("CmdDeleteMaze")
 	
 	Dim As Param Ptr prmID = envVars.pParam->popParam("id", "i")
 	Dim As String id = prmID->pVals->text
@@ -408,4 +336,7 @@ Sub CMD_getMaze(envVars As CmdEnv)
 		
 		Exit Sub
 	EndIf
+	
+	/' Get stats '/
+	Dim As Table Ptr pStatsTab = loadMazeStats(pClient->pAcc)
 End Sub 

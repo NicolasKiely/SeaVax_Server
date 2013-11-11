@@ -59,3 +59,7 @@ Declare Function isAllowedMazeName(mazeName As String) As Integer
 
 /' Creates a new maze file '/
 Declare Sub initializeMazeFile(pAcc As Account ptr, id As Integer, size As Integer)
+
+
+/' Loads maze into table '/
+Declare Sub loadMazeAsTable(fileName As String, pTable As Table Ptr)
