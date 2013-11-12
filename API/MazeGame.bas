@@ -324,5 +324,75 @@ Sub CMD_getMaze(envVars As CmdEnv)
 	Dim As String id = prmID->pVals->text
 	Delete prmID
 	
+	envVars.pPipeOut->addToHeader("MAZEDAT")
+	
 	loadMazeAsTable(pClient->pAcc->getPath("maze_"+id+".txt"), envVars.pPipeOut)
-End Sub 
+End Sub
+
+
+/' Description:
+ '  Edits maze
+ '
+ ' Command name:
+ '  /maze/play/editMaze
+ '
+ ' Targets:
+ '  Accounts
+ '
+ ' Parameters:
+ '		maze id, row, column, value
+ '
+ ' Returns:
+ '/
+Sub CMD_editMaze(envVars As CmdEnv)
+	Dim As Record Ptr pLineErr = 0
+	CAST_ENV_PARS_MACRO()
+	ASSERT_NONNULL_CLIENT("CmdEditMaze")
+	ASSERT_NONNULL_ACCOUNT("CmdEditMaze")
+	
+	/' Fetch parameters '/
+	Dim As Param Ptr prmID  = envVars.pParam->popParam("id", "i")
+	Dim As Param Ptr prmRow = envVars.pParam->popParam("row", "r") 
+	Dim As Param Ptr prmCol = envVars.pParam->popParam("column", "c")
+	Dim As Param Ptr prmVal = envVars.pParam->popParam("value", "v")
+	Dim As String  id   = prmID->pVals->text
+	Dim As Integer row  = ValInt(prmRow->pVals->text)
+	Dim As Integer col  = ValInt(prmCol->pVals->text)
+	Dim As String  fVal = prmVal->pVals->text
+	Delete prmID
+	Delete prmRow
+	Delete prmCol
+	Delete prmVal
+	
+	/' Load maze from disk '/
+	loadMazeAsTable(pClient->pAcc->getPath("maze_"+id+".txt"), envVars.pPipeOut)
+	
+	/' Lookup record '/
+	Dim As Record Ptr pRec = envVars.pPipeOut->pRec
+	Dim As Integer ir = 0
+	While pRec <> 0
+		If ir >= row Then
+			/' Found record '/
+			Dim As Fld Ptr pFld = pRec->pFld
+			Dim As Integer ic = 0
+			While pFld <> 0
+				If ic >= col Then
+					/' Found value '/
+					pFld->value = fVal
+					Exit While
+				EndIf
+				
+				ic += 1
+				pFld = pFld->pNext
+			Wend
+			
+			Exit While
+		EndIf
+		
+		ir += 1
+		pRec = pRec->pNext
+	Wend
+	
+	/' Save edited table '/
+	saveTableAsMaze(pClient->pAcc->getPath("maze_"+id+".txt"), envVars.pPipeOut)
+End Sub

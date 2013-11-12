@@ -16,3 +16,7 @@ id	i	/maze/play/swapStage	1	1	1	1	ID of map to affect
 stage	i	/maze/play/swapStage	1	1	0	1	Force the map to switch to that stage
 id	i	/maze/play/deleteMap	1	1	1	1	ID of map to delete
 id	i	/maze/play/getMaze	1	1	1	1	ID of maze to retrieve
+id	i	/maze/play/editMaze	1	1	1	1	ID of maze to edit
+row	r	/maze/play/editMaze	1	1	1	1	Row of maze tile to edit
+column	c	/maze/play/editMaze	1	1	1	1	Column of maze tile to edit
+value	v	/maze/play/editMaze	1	1	1	1	Value of maze tile to set

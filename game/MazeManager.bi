@@ -63,3 +63,7 @@ Declare Sub initializeMazeFile(pAcc As Account ptr, id As Integer, size As Integ
 
 /' Loads maze into table '/
 Declare Sub loadMazeAsTable(fileName As String, pTable As Table Ptr)
+
+
+/' Saves table as maze file '/
+Declare Sub saveTableAsMaze(fileName As String, pTable As Table Ptr)

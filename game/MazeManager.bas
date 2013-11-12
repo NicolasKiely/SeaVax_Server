@@ -163,3 +163,34 @@ Sub loadMazeAsTable(fileName As String, pTable As Table Ptr)
 	
 	Close #fh
 End Sub
+
+
+Sub saveTableAsMaze(fileName As String, pTable As Table Ptr)
+	Dim As Integer fh = FreeFile()
+	Open fileName For Output As #fh
+	If Err = 2 Or Err = 3 Then 
+		Print "Error on saving maze"
+		Exit Sub
+	EndIf
+	Dim As Integer counter = 0
+	
+	/' Loop through records '/
+	Dim As Record Ptr pRec = pTable->pRec
+	While pRec <> 0
+		/' Loop through fields '/
+		Dim As Fld Ptr pFld = pRec->pFld
+		While pFld <> 0
+			If pFld->pNext <> 0 Then
+				Print #fh, pFld->value;
+			Else
+				Print #fh, pFld->value
+			EndIf
+			
+			pFld = pFld->pNext
+		Wend
+		
+		pRec = pRec->pNext
+	Wend
+	
+	Close #fh
+End Sub
