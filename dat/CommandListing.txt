@@ -19,3 +19,4 @@ id	name	domain	info
 18	deleteMap	/maze/play	Deletes a player's map
 19	getMaze	/maze/play	Retrieves raw maze data from player's saved maps
 20	editMaze	/maze/play	Edits a tile in a map
+21	createGame	/maze/play	Creates a new game room

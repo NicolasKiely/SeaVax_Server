@@ -22,8 +22,14 @@ Type Account
 	/' Whether or not a client has logged in to account '/
 	Dim As Integer isLoggedIn
 	
+	/' Rank in maze game '/
+	Dim As Integer mazeRank
+	
 	/' Maze package '/
 	Dim As String mazePack
+	
+	/' Accounts game room '/
+	Dim As Any Ptr pRoom
 	
 	/' First time account is saved. 0 returned on success '/
 	Declare Function firstSave() As Integer

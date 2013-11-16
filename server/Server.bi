@@ -4,6 +4,7 @@
 #Include Once "../cmds/Command.bi"
 #Include Once "../Header.bi"
 #Include Once "../chatroom/ChatRoom.bi"
+#Include Once "../game/GameManager.bi"
 
 
 #Define SERVER_READ_BUFFER_SIZE 250
@@ -36,6 +37,8 @@ Type Server
 	/' Buffer for reading socket '/
 	Dim As ZString Ptr sockBuf
 	
+	/' Managers game rooms '/
+	Dim As GameManager gameMan
 	
 	Declare Constructor()
 	Declare Destructor()

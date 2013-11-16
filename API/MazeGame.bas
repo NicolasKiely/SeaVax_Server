@@ -395,4 +395,80 @@ Sub CMD_editMaze(envVars As CmdEnv)
 	
 	/' Save edited table '/
 	saveTableAsMaze(pClient->pAcc->getPath("maze_"+id+".txt"), envVars.pPipeOut)
+	'Print "### " + id
+End Sub
+
+
+/' Description:
+ '  Starts new game room
+ '
+ ' Command name:
+ '  /maze/play/createGame
+ '
+ ' Targets:
+ '  Accounts
+ '
+ ' Parameters:
+ '		game type, max players, maze size
+ '
+ ' Returns:
+ '/
+Sub CMD_createMazeGame(envVars As CmdEnv)
+	Dim As Record Ptr pLineErr = 0
+	CAST_ENV_PARS_MACRO()
+	ASSERT_NONNULL_CLIENT("CmdCreateMazeGame")
+	ASSERT_NONNULL_ACCOUNT("CmdCreateMazeGame")
+	
+	
+	/' Fetch parameters '/
+	Dim As Param Ptr prmType    = envVars.pParam->popParam("type", "t")
+	Dim As Param Ptr prmPlayers = envVars.pParam->popParam("players", "p")
+	Dim As Param Ptr prmSize    = envVars.pParam->popParam("size", "s")
+	Dim As String gameType = prmType->pVals->text
+	Dim As Integer players = ValInt(prmPlayers->pVals->text)
+	Dim As Integer size    = ValInt(prmSize->pVals->text)
+	Delete prmType
+	Delete prmPlayers
+	Delete prmSize
+	
+	/' First check that the player already isnt in a game '/
+	If pClient->pAcc->pRoom <> 0 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdCreateMazeGame")
+		pLineErr->addField("Player already is in game")
+		pLineErr->addField("In game room: #" + Str(pClient->pAcc->pRoom))
+		envVars.pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addToHeader("DIALOG")
+		Exit Sub
+	EndIf
+	
+	/' Two players only allowed for now '/
+	If players <> 2 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdCreateMazeGame")
+		pLineErr->addField("Can only have 2 players in this game")
+		pLineErr->addField("players="+Str(players))
+		envVars.pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addToHeader("DIALOG")
+		Exit Sub
+	EndIf
+	
+	/' Check to make sure player has an available map to use '/
+	Dim As Table Ptr pMazeTab = loadMazeStats(pClient->pAcc)
+	Dim As Record Ptr pRec = pMazeTab->getRecordByField(Str(size), MAZE_SIZE_HEADER)
+	If pRec = 0 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdCreateMazeGame")
+		pLineErr->addField("Player does not have proper maze to play")
+		pLineErr->addField("No maze found for size: " + Str(size))
+		envVars.pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addToHeader("DIALOG")
+		Delete pMazeTab
+		Exit Sub
+	EndIf
+	Delete pMazeTab
+	
+	/' So far so good '/
+	Dim As GameRoom Ptr pRoom = New GameRoom(pClient->pAcc, size)
+	pServer->gameMan.addRoom(pRoom)
 End Sub

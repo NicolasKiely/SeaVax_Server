@@ -1,10 +1,9 @@
 SeaV4X
 
 TODO list:
+		Implement game room creation
 		Create map data structures and files
 		permissions
-		Fixing crash-on-login bug (happens sooner if account login fails!), accMan Lookup?
-		Move over to sql
 	Next milestone: permissions
 
 
@@ -13,6 +12,7 @@ Pie-in-Sky List:
 	Scripting
 	Command masking
 	Plugin loading
+	Move over to sql
 
 
 Command system stored on file as:

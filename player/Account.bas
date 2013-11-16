@@ -8,6 +8,7 @@ Constructor Account()
 	this.pNext = 0
 	this.isLoaded = 0
 	this.isLoggedIn = 0
+	this.pRoom = 0
 End Constructor
 
 
@@ -112,10 +113,10 @@ Function AccountManager.loadFromDisk(fileName As String) As Integer
 		Dim As Account Ptr pTempAcc = New Account()
 		pTempAcc->userName = pRec->getFieldByID(iAccountName)->value
 		
-		If pRec->getFieldByID(iLoadAccount)->value = "1" Then
+		'If pRec->getFieldByID(iLoadAccount)->value = "1" Then
 			loadSavedAccount(pTempAcc)
 			accountNum += 1
-		End If
+		'End If
 		
 		this.addAccount(pTempAcc)
 		pRec = pRec->pNext

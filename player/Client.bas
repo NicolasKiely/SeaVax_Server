@@ -55,6 +55,9 @@ End Sub
 
 
 Function Client.getName() As String
-	
-	Return "Client#" + Str(Hex(@This,4))
+	If this.pAcc = 0 Then
+		Return "Client#" + Str(Hex(@This,4))
+	else
+		return this.pAcc->userName
+	end If
 End Function
