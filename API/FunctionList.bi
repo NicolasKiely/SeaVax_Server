@@ -47,13 +47,13 @@
 
 /' Builds the array of commands for binding '/
 #Macro BUILD_CMD_ARRAY_MACRO()
-	Dim CMD_BINDING_ARRAY(1 To 21) As Sub(envVars As CmdEnv) _
+	Dim CMD_BINDING_ARRAY(1 To 22) As Sub(envVars As CmdEnv) _
 		= _
 		{@CMD_getProtocolVersion, @CMD_getServerVersion, @CMD_getModVersion, @CMD_stopServer, @CMD_listDirectory, _
 		@CMD_tableColumns, @CMD_chatMessage, @CMD_clientLogin, @CMD_clientChangePassword, @CMD_manCreateAccount, _
 		@CMD_listAccounts, @CMD_clientLogout, @CMD_directoryInfo, @CMD_flagInfo, @CMD_getMapStats, _
 		@CMD_newMap, @CMD_mapStageSwap, @CMD_deleteMaze, @CMD_getMaze, @CMD_editMaze, _
-		@CMD_createMazeGame}
+		@CMD_createMazeGame, @CMD_fetchMazeRooms}
 #EndMacro
 
 
@@ -79,3 +79,4 @@ DECLARE_CMD_SUB(deleteMaze)               ' 18
 DECLARE_CMD_SUB(getMaze)                  ' 19
 DECLARE_CMD_SUB(editMaze)                 ' 20
 DECLARE_CMD_SUB(createMazeGame)           ' 21
+DECLARE_CMD_SUB(fetchMazeRooms)           ' 22

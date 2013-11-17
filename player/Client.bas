@@ -1,5 +1,6 @@
 #Include Once "Client.bi"
 #Include Once "Header.bi"
+#Include Once "../server/Server.bi"
 
 
 Constructor Client()

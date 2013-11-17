@@ -1,11 +1,13 @@
 #Include Once "GameRoom.bi"
 
 
-Constructor GameRoom(pNewHost As Account Ptr, newMax As Integer)
+Constructor GameRoom(pNewHost As Account Ptr, newMax As Integer, newSize As Integer, newType As String)
 	this.inSession = 0
 	this.maxPlyr = newMax
 	this.numPlyr = 1
 	this.pNext = 0
+	this.gameType = newType
+	this.mapSize = newSize
 	
 	/' Create buffer for references to accounts '/
 	this.ppList = New Account Ptr[this.maxPlyr]
@@ -45,4 +47,11 @@ Function GameRoom.addAccount(pAcc As Account Ptr) As Integer
 	Next
 	
 	Return 0
+End Function
+
+
+Function GameRoom.getHostName() As String
+	If this.ppList = 0 Then Return "#Unallocated#"
+	If this.ppList[0] = 0 Then Return "#Orphaned#"
+	Return this.ppList[0]->userName
 End Function

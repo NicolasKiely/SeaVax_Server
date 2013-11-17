@@ -83,7 +83,6 @@ Sub CMD_clientLogin(envVars As CmdEnv)
 		/' Update login state for new account'/
 		pAcc->isLoggedIn = -1
 		
-		pAcc->pRoom = 0
 		
 		/' Output account logged in as '/
 		envVars.pPipeOut->addToHeader("Login")

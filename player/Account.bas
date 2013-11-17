@@ -179,7 +179,7 @@ End Sub
 Function loadSavedAccount(pAcc As Account Ptr) As Integer
 	If pAcc = 0 Then Return 1
 	If pAcc->userName = "" Then Return 2
-	If pAcc->isLoaded <> 0 Then Return 0
+	'If pAcc->isLoaded <> 0 Then Return 0
 	
 	Dim As String baseDir = ACCOUNT_ROOT_DIR + pAcc->userName + "/"
 	

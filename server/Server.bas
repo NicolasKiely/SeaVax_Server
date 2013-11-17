@@ -258,8 +258,9 @@ Sub Server.cleanUpClients()
 				Print "Deleting first client"
 				/' Delete first client '/
 				pCurrent = pCurrent->pNext
+				this.cleanUpAccount(this.pClient->pAcc)
 				this.pClient->pNext = 0
-				this.pClient->freeSelf()
+				'this.pClient->freeSelf()
 				Delete this.pClient
 				this.pClient = pCurrent
 			
@@ -268,8 +269,10 @@ Sub Server.cleanUpClients()
 				Print "Deleting mid client"
 			
 				pPrev->pNext = pCurrent->pNext
+				
+				this.cleanUpAccount(pCurrent->pAcc)
 				pCurrent->pNext = 0
-				This.pClient->freeSelf()
+				'pCurrent->freeSelf()
 				Delete pCurrent
 				pCurrent = pPrev->pNext
 			EndIf
@@ -282,6 +285,14 @@ Sub Server.cleanUpClients()
 			pCurrent = pCurrent->pNext
 		EndIf
 	Wend
+End Sub
+
+
+Sub Server.cleanUpAccount(pAccount As Account Ptr)
+	If pAccount = 0 Then Exit Sub
+	
+	this.gameMan.removeRoom(pAccount->pRoom)
+	pAccount->pRoom = 0
 End Sub
 
 

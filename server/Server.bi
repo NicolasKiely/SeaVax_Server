@@ -70,6 +70,9 @@ Type Server
 	/' Cleans up clients '/
 	Declare Sub cleanUpClients()
 	
+	/' Cleans up clients account on logout '/
+	Declare Sub cleanUpAccount(pAccount As Account Ptr)
+	
 	/' Handles chat room broadcasting '/
 	Declare Sub handleChatRooms()
 End Type

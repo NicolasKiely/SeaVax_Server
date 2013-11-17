@@ -403,7 +403,7 @@ End Sub
  '  Starts new game room
  '
  ' Command name:
- '  /maze/play/createGame
+ '  /maze/room/create
  '
  ' Targets:
  '  Accounts
@@ -469,6 +469,86 @@ Sub CMD_createMazeGame(envVars As CmdEnv)
 	Delete pMazeTab
 	
 	/' So far so good '/
-	Dim As GameRoom Ptr pRoom = New GameRoom(pClient->pAcc, size)
+	Dim As GameRoom Ptr pRoom = New GameRoom(pClient->pAcc, players, size, "1v1race")
 	pServer->gameMan.addRoom(pRoom)
+End Sub
+
+
+/' Description:
+ '  Fetches list of open game rooms
+ '
+ ' Command name:
+ '  /maze/room/fetch
+ '
+ ' Targets:
+ '  Accounts
+ '
+ ' Parameters:
+ '
+ ' Returns:
+ '  Room Creator, Current players, max players, Game type, map size
+ '/
+Sub CMD_fetchMazeRooms(envVars As CmdEnv)
+	Dim As Record Ptr pLineErr = 0
+	CAST_ENV_PARS_MACRO()
+	ASSERT_NONNULL_CLIENT("CmdFetchMazeRooms")
+	ASSERT_NONNULL_ACCOUNT("CmdFetchMazeRooms")
+	
+	envVars.pPipeOut->addToHeader("MAZELIST")
+	envVars.pPipeOut->addToColumn("Host")
+	envVars.pPipeOut->addToColumn("Type")
+	envVars.pPipeOut->addToColumn("Count")
+	envVars.pPipeOut->addToColumn("Max")
+	envVars.pPipeOut->addToColumn("Size")
+	
+	/' DEBUG '/
+	Dim As Fld Ptr pDeb = envVars.pPipeOut->pHeader
+	While pDeb <> 0
+		Print "'"+pDeb->value+"'";
+		
+		pDeb = pDeb->pNext
+	Wend
+	print
+	
+	
+	/' Loop through game rooms '/
+	Dim As GameRoom Ptr pRoom = pServer->gameMan.pRoot
+	While pRoom <> 0
+		If pRoom->inSession = 0 Then
+			Dim As Record Ptr pRec = New Record()
+			pRec->addField(pRoom->getHostName())
+			pRec->addField(pRoom->gameType)
+			pRec->addField(Str(pRoom->numPlyr))
+			pRec->addField(Str(pRoom->maxPlyr))
+			pRec->addField(Str(pRoom->mapSize))
+			
+			envVars.pPipeOut->addRecord(pRec)
+		End If
+		
+		pRoom = pRoom->pNext
+	Wend
+End Sub
+
+
+/' Description:
+ '  Attempts for player to join a room
+ '
+ ' Command name:
+ '  /maze/room/joinRoom
+ '
+ ' Targets:
+ '  Accounts
+ '
+ ' Parameters:
+ '  Player host name (p)
+ '
+ ' Returns:
+ '  Room Creator, Current players, max players, Game type, map size
+ '/
+Sub CMD_fetchMazeRooms(envVars As CmdEnv)
+	Dim As Record Ptr pLineErr = 0
+	CAST_ENV_PARS_MACRO()
+	ASSERT_NONNULL_CLIENT("CmdFetchMazeRooms")
+	ASSERT_NONNULL_ACCOUNT("CmdFetchMazeRooms")
+	
 End Sub

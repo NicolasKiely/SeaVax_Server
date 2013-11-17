@@ -1,7 +1,7 @@
 SeaV4X
 
 TODO list:
-		Implement game room creation
+		player join game room (send on room creation too)
 		Create map data structures and files
 		permissions
 	Next milestone: permissions
