@@ -20,6 +20,6 @@ id	i	/maze/play/editMaze	1	1	1	1	ID of maze to edit
 row	r	/maze/play/editMaze	1	1	1	1	Row of maze tile to edit
 column	c	/maze/play/editMaze	1	1	1	1	Column of maze tile to edit
 value	v	/maze/play/editMaze	1	1	1	1	Value of maze tile to set
-type	t	/maze/play/createGame	1	1	1	1	Game type
-players	p	/maze/play/createGame	1	1	1	1	Maximum number of players in game
-size	s	/maze/play/createGame	1	1	1	1	Size of maps allowed
+type	t	/maze/room/create	1	1	1	1	Game type
+players	p	/maze/room/create	1	1	1	1	Maximum number of players in game
+size	s	/maze/room/create	1	1	1	1	Size of maps allowed

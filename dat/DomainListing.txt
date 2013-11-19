@@ -10,3 +10,4 @@ id	name	parent	info
 9	chat	/	Chat functions
 10	maze	/	Maze game functionality
 11	play	maze	Player-side game functionality
+12	room	maze	Game room management for players

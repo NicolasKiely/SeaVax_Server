@@ -494,12 +494,14 @@ Sub CMD_fetchMazeRooms(envVars As CmdEnv)
 	ASSERT_NONNULL_CLIENT("CmdFetchMazeRooms")
 	ASSERT_NONNULL_ACCOUNT("CmdFetchMazeRooms")
 	
-	envVars.pPipeOut->addToHeader("MAZELIST")
-	envVars.pPipeOut->addToColumn("Host")
-	envVars.pPipeOut->addToColumn("Type")
-	envVars.pPipeOut->addToColumn("Count")
-	envVars.pPipeOut->addToColumn("Max")
-	envVars.pPipeOut->addToColumn("Size")
+	If pServer->gameMan.pRoot <> 0 then
+		envVars.pPipeOut->addToHeader("MAZELIST")
+		envVars.pPipeOut->addToColumn("Host")
+		envVars.pPipeOut->addToColumn("Type")
+		envVars.pPipeOut->addToColumn("Count")
+		envVars.pPipeOut->addToColumn("Max")
+		envVars.pPipeOut->addToColumn("Size")
+	End If
 	
 	/' DEBUG '/
 	Dim As Fld Ptr pDeb = envVars.pPipeOut->pHeader
@@ -545,7 +547,7 @@ End Sub
  ' Returns:
  '  Room Creator, Current players, max players, Game type, map size
  '/
-Sub CMD_fetchMazeRooms(envVars As CmdEnv)
+Sub CMD_joinMazeRoom(envVars As CmdEnv)
 	Dim As Record Ptr pLineErr = 0
 	CAST_ENV_PARS_MACRO()
 	ASSERT_NONNULL_CLIENT("CmdFetchMazeRooms")
