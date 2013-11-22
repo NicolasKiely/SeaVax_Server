@@ -260,7 +260,6 @@ Sub Server.cleanUpClients()
 				pCurrent = pCurrent->pNext
 				this.cleanUpAccount(this.pClient->pAcc)
 				this.pClient->pNext = 0
-				'this.pClient->freeSelf()
 				Delete this.pClient
 				this.pClient = pCurrent
 			
@@ -272,7 +271,6 @@ Sub Server.cleanUpClients()
 				
 				this.cleanUpAccount(pCurrent->pAcc)
 				pCurrent->pNext = 0
-				'pCurrent->freeSelf()
 				Delete pCurrent
 				pCurrent = pPrev->pNext
 			EndIf
