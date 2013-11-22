@@ -17,4 +17,7 @@ Type GameManager
 	
 	/' Removes game room from list '/
 	Declare Sub removeRoom(pDelRoom As GameRoom Ptr)
+	
+	/' Returns game room hosted by player, 0 if not found '/
+	Declare Function lookupPlayersGame(playerName As String) As GameRoom Ptr
 End Type

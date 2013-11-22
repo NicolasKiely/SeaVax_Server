@@ -50,3 +50,18 @@ Sub GameManager.removeRoom(pDelRoom As GameRoom Ptr)
 		this.numRooms -= 1
 	EndIf
 End Sub
+
+
+Function GameManager.lookupPlayersGame(playerName As String) As GameRoom Ptr
+	Dim As GameRoom Ptr pRoom = this.pRoot
+	
+	While pRoom <> 0
+		If pRoom->getHostName() = playerName Then
+			Return pRoom
+		EndIf
+		
+		pRoom = pRoom->pNext
+	Wend
+	
+	Return 0
+End Function
