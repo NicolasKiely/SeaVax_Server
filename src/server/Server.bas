@@ -19,63 +19,47 @@ Sub Server.initSock()
 	/' Needed for initializing '/
 	this.sockBuf = Callocate(SERVER_READ_BUFFER_SIZE)
 	
-	#IFDEF __FB_WIN32__
-	If WSAStartup(MAKEWORD(2,2), @this.wdat) <> 0 Then
-		Print "Error in calling WSAstartup(1,1,@)"
-	EndIf
-	#ENDIF
+	/' Set up addrinfo structs '/
+	dim as addrinfo ptr aiList
+	dim as addrinfo aiHint
+	aiHint.ai_family = AF_UNSPEC
+	aiHint.ai_socktype = SOCK_STREAM
+	aiHint.ai_flags = AI_PASSIVE
+	
+	dim as integer ret = getaddrinfo(NULL, SERVER_DEFAULT_PORT, @aiHint, @aiList)
+	if (ret <> 0) then print "Error in looking up binding address info"
+	
 	
 	/' IPv4 TCP listening socket '/
-	this.sock_l = OpenSocket(AF_INET, SOCK_STREAM, IPPROTO_TCP)
+	this.sock_l = OpenSocket(aiList->ai_family, aiList->ai_socktype, aiList->ai_protocol)
 	
-	#IFDEF __FB_WIN32__
-	If this.sock_l = INVALID_SOCKET Then
+	If this.sock_l < 0 Then
 		Print "Error in opening listening socket"
 	EndIf
-	#ELSE
-	If this.sock_l = -1 Then
-		Print "Error in opening listening socket"
-	EndIf
-	#ENDIF
-	
-	Dim sockAd As sockaddr_in
-	
-	/' Using IPv4 on port 6282. Dont care about address '/
-	sockAd.sin_family = AF_INET
-	sockAd.sin_port   = htons(6282)
-	sockAd.sin_addr.s_addr = inaddr_any
 	
 	/' Ignore "address in use" error '/
-	#IFDEF __FB_WIN32__
-	Dim yes As ZString * 2 => "1"
-	#ELSE
 	Dim yes as integer = 1
-	#ENDIF
-	setsockopt(this.sock_l, SOL_SOCKET, SO_REUSEADDR, yes, 1)
+	setsockopt(this.sock_l, SOL_SOCKET, SO_REUSEADDR, @yes, sizeof(yes))
 	
 	/' Bind socket descriptor to address '/
-	If bind(this.sock_l, @sockAd, SizeOf(sockAd))<0 Then
+	'If bind(this.sock_l, @sockAd, SizeOf(sockAd)) Then
+	If bind(this.sock_l, aiList->ai_addr, aiList->ai_addrlen) Then
 		Print "Error in binding listening socket"
 		Return
 	EndIf
 	
 	/' Listen to socket '/
-	If listen(this.sock_l, 10) < 0 Then
+	If listen(this.sock_l, 10) Then
 		Print "Error in listening to socket"
 		Return
 	EndIf
+	
+	if (aiList <> 0) then freeaddrinfo(aiList)
 End Sub
 
 
 Sub Server.cleanSock()
-	#IFDEF __FB_WIN32__
-	WSACleanup()
-	
-	CloseSocket(this.sock_l)
-	#ELSE
 	close(this.sock_l)
-	#ENDIF
-	
 End Sub
 
 
@@ -87,13 +71,13 @@ Sub Server.serverMain()
 	While this.shutDown = 0
 		Dim As Double loopTime = Timer
 		
-		'tick += 1
-		/'If tick >= 200 Then
+		tick += 1
+		If tick >= 200 Then
 			Print "Tick"
 			Print "Client count: " + Str(this.getClientCount())
 			tick = 0
 		EndIf
-		'/
+		
 		/' Work '/
 		
 		/' Check for client input '/
@@ -155,7 +139,7 @@ Sub Server.getReadSocks(pReadSet As fd_set Ptr)
 	tv.tv_usec = 0
 	
 	/' Poll read sockets '/
-	selectSocket(max, pReadSet, 0, 0, @tv)
+	selectSocket(max+1, pReadSet, 0, 0, @tv)
 	
 	If FD_ISSET(this.sock_l, pReadSet) Then Print "Connection attempt detected!"
 End Sub
@@ -177,17 +161,8 @@ Sub Server.handleReadSocks(pReadSet As fd_set Ptr)
 		pNewClient->sock = accept(this.sock_l, @(pNewClient->addr), @size)
 		If pNewClient->sock = -1 Or pNewClient->sock = 0 Then
 			Print "Error: accept"
-			#IFDEF __FB_WIN32__
-			Print WSAGetLastError - WSABASEERR
-			#ENDIF
 			safeToAdd = 0
 		EndIf
-		
-		#IFDEF __FB_WIN32__
-		If WSAGetLastError <> 0 Then safeToAdd = 0
-		#ELSE
-		safeToAdd = 0
-		#ENDIF
 		
 		/' Dont accept if getting ready to kick, theres a bug where dropped
 		   clients have a ghost structure that reconnects and blocks the recv

@@ -7,17 +7,13 @@
 
 
 #Define SERVER_READ_BUFFER_SIZE 250
+#Define SERVER_DEFAULT_PORT "6282"
 
 
 /'****************************************************************************
  ' Servers primary data structure
  ***************************************************************************'/
 Type Server
-	#IFDEF __FB_WIN32__
-		/' Needed for sockets '/
-		Dim As WSAData wdat
-	#ENDIF
-	
 	/' Listening socket '/
 	Dim As SOCKET sock_l
 	
