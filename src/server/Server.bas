@@ -73,8 +73,8 @@ Sub Server.serverMain()
 		
 		tick += 1
 		If tick >= 200 Then
-			Print "Tick"
-			Print "Client count: " + Str(this.getClientCount())
+			'Print "Tick"
+			'Print "Client count: " + Str(this.getClientCount())
 			tick = 0
 		EndIf
 		
@@ -109,7 +109,7 @@ End Sub
 
 Sub Server.getReadSocks(pReadSet As fd_set Ptr)
 	/' Start tracking max sockets '/
-	Dim As UInteger max = this.sock_l
+	Dim As UInteger max = this.sock_l+1
 	
 	/' Add the listner socket '/
 	FD_SET_(this.sock_l, pReadSet)
@@ -121,7 +121,7 @@ Sub Server.getReadSocks(pReadSet As fd_set Ptr)
 		
 		If this.pClient->sock <> -1 And this.pClient->markForDeletion=0 Then 
 			FD_SET_(pCurrent->sock, pReadSet)
-			If max < pCurrent->sock Then max = pCurrent->sock
+			If max <= pCurrent->sock Then max = pCurrent->sock+1
 		EndIf
 		
 		pCurrent = pCurrent->pNext
@@ -139,7 +139,7 @@ Sub Server.getReadSocks(pReadSet As fd_set Ptr)
 	tv.tv_usec = 0
 	
 	/' Poll read sockets '/
-	selectSocket(max+1, pReadSet, 0, 0, @tv)
+	selectSocket(max, pReadSet, 0, 0, @tv)
 	
 	If FD_ISSET(this.sock_l, pReadSet) Then Print "Connection attempt detected!"
 End Sub
@@ -411,7 +411,8 @@ Sub Server.handleClientInput(pTalker As Client Ptr, zDatIn As ZString Ptr, datLe
 	
 	/' Send to client '/
 	If pOut->pHeader <> 0 Or pOut->pRec <> 0 Then
-		Print "|--- " + pOut->toPrettyString() + " ---|"
+		'Print "|--- " + pOut->toPrettyString() + " ---|"
+		Print "|--- " + pOut->toString() + " ---|"
 		pTalker->sendTable(pOut)
 	End If
 	

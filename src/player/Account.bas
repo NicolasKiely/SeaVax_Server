@@ -42,7 +42,7 @@ Function Account.save() As Integer
 	
 	Print #fh, "key" + Chr(9) + "value"
 	Print #fh, "password" + Chr(9) + this.pass
-	Print #fh, "mazePackage" + Chr(9) + this.mazePack
+	Print #fh, "mazePackage" + Chr(9) + this.getMazePackage()
 	
 	Close #fh
 	

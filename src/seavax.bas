@@ -7,21 +7,6 @@
  '/
  
 ' Working on: handshaking Commands, account management
-/' Command system:
- '		/acc/*  : account management
- '		/acc/mk -name|-n <account name> -password|-p <password hash> [-class|-c <permission class>]
- '			Creates new account
- '		/acc/rm -name|-n <account name>
- '			Deletes account
- '		/acc/lk -name|-n <account name> [-time|-t <time>] [-unlock|-u]
- '			Locks account for given amount of time. If u is specified,
- '			unlocks.
- '		/acc/ls [-team|-t <team name>] [-lock|-l / -unlock|-u]
- '			Lists accounts. -t specifies by team, -l specifies locked/unlocked
- '
- '		/prc/*  : process management
- '		/prc/stop [-time|-t <time>] [-message|-m <message>] [-interval|-i <time>]
- '/
 
 #Include Once "file.bi"
 #Include Once "terra/WorldGen.bi"
