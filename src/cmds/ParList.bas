@@ -283,11 +283,13 @@ Function Param.popParam(major As String, minor As String) As Param Ptr
 			If pOld = 0 Then
 				/' First parameter '/
 				this.pNext = this.pNext->pNext
+				pTemp->pNext = 0
 				Return pTemp
 			
 			Else
 				/' Internal parameter '/
 				pOld->pNext = pTemp->pNext
+				pTemp->pNext = 0
 				Return pTemp
 			EndIf
 		EndIf

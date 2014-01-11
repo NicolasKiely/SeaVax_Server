@@ -19,10 +19,11 @@
  '  Account name logged in
  '/
 Sub CMD_clientLogin(envVars As CmdEnv)
-		
 	Dim As Server Ptr pServer = CPtr(Server Ptr, envVars.aServer)
 	Dim As Client Ptr pClient = CPtr(Client Ptr, envVars.aClient)
 	Dim As Record Ptr pLineErr = 0
+	dim as String accName = ""
+	Dim As Account Ptr pAcc = 0
 	
 	If pClient = 0 Then
 		pLineErr = New Record()
@@ -34,24 +35,14 @@ Sub CMD_clientLogin(envVars As CmdEnv)
 		Exit Sub
 	EndIf
 	
+	
+	
 	/' Pop parameters '/
 	Dim As Param Ptr prmAcc = envVars.pParam->popParam("account", "a")
 	Dim As Param Ptr prmPass = envVars.pParam->popParam("password", "p")
 	
 	/' Lookup account name '/
-	Dim As Account Ptr pAcc
-	Dim As String accName = ""
-	
-	If prmAcc = 0 Or prmPass = 0 Then
-		Print "ERROR! prmAcc|prmPass = 0!" + Str(prmAcc) + ", " + Str(prmPass)
-	Else
-		If prmAcc->pVals = 0 Then
-			Print "ERROR! prmAcc|prmPass = 0!" + Str(prmAcc) + ", " + Str(prmPass)
-		Else
-			accName = prmAcc->pVals->text 'BUG!!! <--------
-		EndIf
-	EndIf
-	
+	accName = prmAcc->pVals->text
 	
 	pAcc = pServer->accMan.lookupAccount(accName)
 	
