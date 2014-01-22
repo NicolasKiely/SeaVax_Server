@@ -77,6 +77,22 @@ Sub CMD_createMazeGame(envVars As CmdEnv)
 	/' So far so good '/
 	Dim As GameRoom Ptr pRoom = New GameRoom(pClient->pAcc, players, size, "1v1race")
 	pServer->gameMan.addRoom(pRoom)
+	
+	/' Return game room data to trigger client '/
+	envVars.pPipeOut->addToHeader("JOINMAZEROOM")
+	envVars.pPipeOut->addToColumn("Host")
+	envVars.pPipeOut->addToColumn("Type")
+	envVars.pPipeOut->addToColumn("Count")
+	envVars.pPipeOut->addToColumn("Max")
+	envVars.pPipeOut->addToColumn("Size")
+	
+	pRec = New Record()
+	pRec->addField(pRoom->getHostName())
+	pRec->addField(pRoom->gameType)
+	pRec->addField(Str(pRoom->numPlyr))
+	pRec->addField(Str(pRoom->maxPlyr))
+	pRec->addField(Str(pRoom->mapSize))
+	envVars.pPipeOut->addRecord(pRec)
 End Sub
 
 

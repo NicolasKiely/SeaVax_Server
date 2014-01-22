@@ -176,6 +176,25 @@ Sub AccountManager.save()
 End Sub
 
 
+Sub AccountManager.saveIndex()
+	Dim As Integer fh = FreeFile()
+	Open ACCOUNT_LIST_FILE For Output As #fh
+	
+	Print #fh, "name" + Chr(9) + "load"
+	
+	/' Save accounts '/
+	Dim As Account Ptr pTemp = this.pAcc
+	While pTemp <> 0
+		/' Save account to index '/
+		Print #fh, pTemp->userName + Chr(9) + "1"
+		
+		pTemp = pTemp->pNext
+	Wend
+	
+	Close #fh
+End Sub
+
+
 Function loadSavedAccount(pAcc As Account Ptr) As Integer
 	If pAcc = 0 Then Return 1
 	If pAcc->userName = "" Then Return 2

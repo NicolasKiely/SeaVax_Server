@@ -66,8 +66,11 @@ Type AccountManager
 	/' Looks up an account by name '/
 	Declare Function lookupAccount(accName As String) As Account Ptr
 	
-	/' Saves all accounts '/
+	/' Saves all accounts and index '/
 	Declare Sub save()
+	
+	/' Saves index of accounts '/
+	Declare Sub saveIndex()
 	
 	Declare Constructor()
 	Declare Destructor()

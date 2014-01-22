@@ -209,6 +209,7 @@ Sub CMD_manCreateAccount(envVars As CmdEnv)
 	
 	If pAcc->firstSave() = 0 Then
 		pServer->accMan.addAccount(pAcc)
+		pServer->accMan.saveIndex()
 		
 	Else
 		pLineErr = New Record()

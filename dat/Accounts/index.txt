@@ -1,4 +1,3 @@
 name	load
-Mr. Java	1
-Nic	1
+bot	1
 Admin	1
