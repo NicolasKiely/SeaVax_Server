@@ -172,8 +172,8 @@ End Sub
 Sub CMD_joinMazeRoom(envVars As CmdEnv)
 	Dim As Record Ptr pLineErr = 0
 	CAST_ENV_PARS_MACRO()
-	ASSERT_NONNULL_CLIENT("CmdJoinMazeRooms")
-	ASSERT_NONNULL_ACCOUNT("CmdJoinMazeRooms")
+	ASSERT_NONNULL_CLIENT("CmdJoinMazeRoom")
+	ASSERT_NONNULL_ACCOUNT("CmdJoinMazeRoom")
 	
 	/' Fetch parameters '/
 	Dim As Param Ptr prmHost = envVars.pParam->popParam("host", "h")
@@ -267,9 +267,8 @@ End Sub
 Sub CMD_leaveMazeRoom(envVars As CmdEnv)
 	Dim As Record Ptr pLineErr = 0
 	CAST_ENV_PARS_MACRO()
-	ASSERT_NONNULL_CLIENT("CmdJoinMazeRooms")
-	ASSERT_NONNULL_ACCOUNT("CmdJoinMazeRooms")
+	ASSERT_NONNULL_CLIENT("CmdLeaveMazeRoom")
+	ASSERT_NONNULL_ACCOUNT("CmdLeaveMazeRoom")
 	
-	
-	
+	pServer->gameMan.accountLeave(pClient->pAcc)
 End Sub
