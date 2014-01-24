@@ -23,5 +23,9 @@ Type GameRoom
 	/' Attempts to add account to game room '/
 	Declare Function addAccount(pAcc As Account Ptr) As Integer
 	
+	Declare Sub removeAccount(pAcc As Account Ptr)
+	
 	Declare Function getHostName() As String
+	
+	Declare Function getHostAccount() As Account Ptr
 End Type

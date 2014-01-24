@@ -247,3 +247,29 @@ Sub CMD_joinMazeRoom(envVars As CmdEnv)
 	pRec->addField(Str(pRoom->mapSize))
 	envVars.pPipeOut->addRecord(pRec)
 End Sub
+
+
+/' Description:
+ '  Causes player to leave game room
+ '
+ ' Command name:
+ '  /maze/room/leaveRoom
+ '
+ ' Targets:
+ '  Accounts
+ '
+ ' Parameters:
+ '  
+ '
+ ' Returns:
+ '
+ '/
+Sub CMD_leaveMazeRoom(envVars As CmdEnv)
+	Dim As Record Ptr pLineErr = 0
+	CAST_ENV_PARS_MACRO()
+	ASSERT_NONNULL_CLIENT("CmdJoinMazeRooms")
+	ASSERT_NONNULL_ACCOUNT("CmdJoinMazeRooms")
+	
+	
+	
+End Sub

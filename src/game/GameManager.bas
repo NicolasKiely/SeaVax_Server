@@ -52,6 +52,26 @@ Sub GameManager.removeRoom(pDelRoom As GameRoom Ptr)
 End Sub
 
 
+Sub GameManager.accountLeave(pAcc As Account Ptr)
+	/' Handle null pointers '/
+	If (this.pRoot = 0) Or (pAcc = 0) Then Exit Sub
+	
+	/' Account not even in room '/
+	If (pAcc->pRoom = 0) Then Exit Sub
+	
+	Dim As GameRoom Ptr pRoom = CPtr(GameRoom Ptr, pAcc->pRoom)
+	
+	If pRoom->getHostAccount() = pAcc Then
+		/' Handle removing game room '/
+		this.removeRoom(pRoom)
+		
+	Else
+		/' Remove player from room '/
+		pRoom->removeAccount(pAcc)
+	End if
+End Sub
+
+
 Function GameManager.lookupPlayersGame(playerName As String) As GameRoom Ptr
 	Dim As GameRoom Ptr pRoom = this.pRoot
 	

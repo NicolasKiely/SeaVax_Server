@@ -21,3 +21,4 @@ id	name	domain	info
 20	editMaze	/maze/play	Edits a tile in a map
 21	create	/maze/room	Creates a new game room
 22	fetch	/maze/room	Gets list of waiting rooms
+23	leave	/maze/room	Logs out of current game room

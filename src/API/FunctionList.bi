@@ -47,26 +47,26 @@
 
 /' Builds the array of commands for binding '/
 #Macro BUILD_CMD_ARRAY_MACRO()
-	Dim CMD_BINDING_ARRAY(1 To 22) As Sub(envVars As CmdEnv) _
+	Dim CMD_BINDING_ARRAY(1 To 23) As Sub(envVars As CmdEnv) _
 		= _
 		{@CMD_getProtocolVersion, @CMD_getServerVersion, @CMD_getModVersion, @CMD_stopServer, @CMD_listDirectory, _
 		@CMD_tableColumns, @CMD_chatMessage, @CMD_clientLogin, @CMD_clientChangePassword, @CMD_manCreateAccount, _
 		@CMD_listAccounts, @CMD_clientLogout, @CMD_directoryInfo, @CMD_flagInfo, @CMD_getMapStats, _
 		@CMD_newMap, @CMD_mapStageSwap, @CMD_deleteMaze, @CMD_getMaze, @CMD_editMaze, _
-		@CMD_createMazeGame, @CMD_fetchMazeRooms}
+		@CMD_createMazeGame, @CMD_fetchMazeRooms, @CMD_leaveMazeRoom}
 #EndMacro
 
 
 /' Declare the subroutines '/
-DECLARE_CMD_SUB(getProtocolVersion)			'  1
-DECLARE_CMD_SUB(getServerVersion)			'  2
-DECLARE_CMD_SUB(getModVersion)				'  3
-DECLARE_CMD_SUB(stopServer)					'  4
-DECLARE_CMD_SUB(listDirectory)				'  5
-DECLARE_CMD_SUB(tableColumns)					'  6
-DECLARE_CMD_SUB(chatMessage)					'  7
-DECLARE_CMD_SUB(clientLogin)					'  8
-DECLARE_CMD_SUB(clientChangePassword)		'  9
+DECLARE_CMD_SUB(getProtocolVersion)       '  1
+DECLARE_CMD_SUB(getServerVersion)         '  2
+DECLARE_CMD_SUB(getModVersion)            '  3
+DECLARE_CMD_SUB(stopServer)               '  4
+DECLARE_CMD_SUB(listDirectory)            '  5
+DECLARE_CMD_SUB(tableColumns)             '  6
+DECLARE_CMD_SUB(chatMessage)              '  7
+DECLARE_CMD_SUB(clientLogin)              '  8
+DECLARE_CMD_SUB(clientChangePassword)     '  9
 DECLARE_CMD_SUB(manCreateAccount)         ' 10
 DECLARE_CMD_SUB(listAccounts)             ' 11
 DECLARE_CMD_SUB(clientLogout)             ' 12
@@ -80,3 +80,4 @@ DECLARE_CMD_SUB(getMaze)                  ' 19
 DECLARE_CMD_SUB(editMaze)                 ' 20
 DECLARE_CMD_SUB(createMazeGame)           ' 21
 DECLARE_CMD_SUB(fetchMazeRooms)           ' 22
+DECLARE_CMD_SUB(leaveMazeRoom)            ' 23

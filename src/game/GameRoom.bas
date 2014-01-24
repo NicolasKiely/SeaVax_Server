@@ -21,7 +21,10 @@ End Constructor
 Destructor GameRoom()
 	If this.ppList <> 0 Then
 		For i As Integer = 0 To this.maxPlyr-1
-			this.ppList[i] = 0
+			If this.ppList[i] <> 0 Then
+				(this.ppList[i])->pRoom = 0
+				this.ppList[i] = 0
+			End If
 		Next
 		
 		Delete[] this.ppList
@@ -50,8 +53,34 @@ Function GameRoom.addAccount(pAcc As Account Ptr) As Integer
 End Function
 
 
+Sub GameRoom.removeAccount(pAcc As Account Ptr)
+	If pAcc = 0 Then Exit Sub
+	If this.ppList = 0 Then Exit Sub
+	
+	/' Search for account pointer in list '/
+	For i As Integer = 0 To this.maxPlyr-1
+		If this.ppList[i] = pAcc Then
+			/' Remove account from list '/
+			this.ppList[i] = 0
+			this.numPlyr -= 1
+			
+			/' Set account to be in no room '/
+			pAcc->pRoom = 0
+			
+			Exit Sub
+		End If
+	Next
+End Sub
+
+
 Function GameRoom.getHostName() As String
 	If this.ppList = 0 Then Return "#Unallocated#"
 	If this.ppList[0] = 0 Then Return "#Orphaned#"
 	Return this.ppList[0]->userName
+End Function
+
+
+Function GameRoom.getHostAccount() As Account Ptr
+	If this.ppList = 0 Then Return 0
+	Return this.ppList[0]
 End Function
