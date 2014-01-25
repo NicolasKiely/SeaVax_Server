@@ -76,6 +76,24 @@ Sub CMD_createMazeGame(envVars As CmdEnv)
 		Exit Sub
 	EndIf
 	
+	/' Check to see if any of those maps are public '/
+	Dim As Table Ptr pQryPubTab = queryTable(pQrySizeTab, MAZE_STAGED_HEADER, "$==0")
+	Delete pQrySizeTab
+	
+	If pQryPubTab->hasRecords()=0 Then
+		pLineErr = New Record()
+		pLineErr->addField("CmdCreateMazeGame")
+		pLineErr->addField("Player does not have proper maze to play")
+		pLineErr->addField("None of mazes of size '" +Str(size)+ "' are public")
+		envVars.pPipeErr->addRecord(pLineErr)
+		envVars.pPipeErr->addToHeader("DIALOG")
+		
+		Delete pQryPubTab
+		Exit Sub
+	End If
+	Delete pQryPubTab
+	
+	
 	/' So far so good '/
 	Dim As GameRoom Ptr pRoom = New GameRoom(pClient->pAcc, players, size, "1v1race")
 	pServer->gameMan.addRoom(pRoom)
