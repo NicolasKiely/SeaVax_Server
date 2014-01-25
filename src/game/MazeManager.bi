@@ -41,6 +41,10 @@ End Type
 Declare Function loadMazeStats(pAccount As Account Ptr) As Table Ptr
 
 
+/' Returns -1 if player has an available public maze of given size '/
+Declare Function playerHasPublicMaze(pAcc As Account Ptr, size As Integer) As Integer
+
+
 /' Returns 0 if invalid size, -1 if valid '/
 Declare Function isValidMapSize(size As Integer) As Integer
 

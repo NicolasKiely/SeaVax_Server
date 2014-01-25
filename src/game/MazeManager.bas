@@ -26,6 +26,19 @@ Function loadMazeStats(pAcc As Account Ptr) As Table Ptr
 End Function
 
 
+Function playerHasPublicMaze(pAcc As Account Ptr, size As Integer) As Integer
+	If pAcc = 0 Then Return 0
+	
+	/' Lookup account's maze stats '/
+	Dim As Table Ptr pTable = loadMazeStats(pAcc)
+	
+	/' TODO: Run queries against table '/
+	
+	If pTable <> 0 Then Delete pTable
+	Dim As Record Ptr pRec
+End Function
+
+
 Function isValidMapSize(size As Integer) As Integer
 	If size = FREE_MAX_MAP_SIZE Then Return -1
 	If size = ENTRY_MAX_MAP_SIZE Then Return -1

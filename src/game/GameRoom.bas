@@ -84,3 +84,50 @@ Function GameRoom.getHostAccount() As Account Ptr
 	If this.ppList = 0 Then Return 0
 	Return this.ppList[0]
 End Function
+
+
+Sub writeRoomToTable(pRoom As GameRoom ptr, pTable As Table Ptr)
+	If pTable = 0 Then Exit Sub
+	
+	/' Set up columns, then add record '/
+	writeRoomColumns(pTable)
+	writeRoomRecord(pRoom, pTable)
+End Sub
+
+
+Sub writeRoomColumns(pTable As Table Ptr)
+	If pTable = 0 Then Exit Sub
+	
+	/' Set up columns '/
+	pTable->addToColumn("Host")
+	pTable->addToColumn("Type")
+	pTable->addToColumn("Count")
+	pTable->addToColumn("Max")
+	pTable->addToColumn("Size")
+End Sub
+
+
+Sub writeRoomRecord(pRoom As GameRoom Ptr, pTable As Table Ptr)
+	If pTable = 0 Then Exit Sub
+	
+	/' Add record '/
+	Dim As Record Ptr pRec = New Record()
+	If pRoom = 0 Then
+		/' No Room '/
+		pRec->addField("#NULL#")
+		pRec->addField("#NULL#")
+		pRec->addField("0")
+		pRec->addField("0")
+		pRec->addField("0")
+		
+	Else
+		/' Add room in record '/
+		pRec->addField(pRoom->getHostName())
+		pRec->addField(pRoom->gameType)
+		pRec->addField(Str(pRoom->numPlyr))
+		pRec->addField(Str(pRoom->maxPlyr))
+		pRec->addField(Str(pRoom->mapSize))
+	End If
+	
+	pTable->addRecord(pRec)
+End Sub

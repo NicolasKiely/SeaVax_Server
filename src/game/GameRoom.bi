@@ -29,3 +29,13 @@ Type GameRoom
 	
 	Declare Function getHostAccount() As Account Ptr
 End Type
+
+
+/' Writes game room column and record fields to table. Doesn't overwrite data '/
+Declare Sub writeRoomToTable(pRoom As GameRoom Ptr, pTable As Table Ptr)
+
+/' Writes columns of room fields to table. Doesn't overwrite data '/
+Declare Sub writeRoomColumns(pTable As Table Ptr)
+
+/' Appends room fields as record to table '/
+Declare Sub writeRoomRecord(pRoom As GameRoom Ptr, pTable As Table Ptr)

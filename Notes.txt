@@ -1,7 +1,6 @@
 SeaV4X
 
 TODO list:
-		- player join game room (send on room creation too)
 		permissions
 	Next milestone: permissions
 
@@ -11,7 +10,7 @@ Pie-in-Sky List:
 	Scripting
 	Command masking
 	Plugin loading
-	Move over to sql
+	Move over to sql backend
 
 
 Command system stored on file as:
@@ -24,7 +23,7 @@ ID, Command name, domain id, help info
 
 
 Command packet: \t acts as pipe between commands, \n starts fresh
-	<Echo String> \t <command> <parameters> \t <commands> <parameters> ... \n
+	<Echo String> | <command> <parameters> ;
 
 Client side echos:
 	GUI - automated stuff, don't show to console)

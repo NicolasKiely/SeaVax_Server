@@ -62,6 +62,8 @@ Sub CMD_createMazeGame(envVars As CmdEnv)
 	/' Check to make sure player has an available map to use '/
 	Dim As Table Ptr pMazeTab = loadMazeStats(pClient->pAcc)
 	Dim As Record Ptr pRec = pMazeTab->getRecordByField(Str(size), MAZE_SIZE_HEADER)
+	/' TODO: use playerHasPublicMaze '/
+	
 	If pRec = 0 Then
 		pLineErr = New Record()
 		pLineErr->addField("CmdCreateMazeGame")
@@ -80,19 +82,7 @@ Sub CMD_createMazeGame(envVars As CmdEnv)
 	
 	/' Return game room data to trigger client '/
 	envVars.pPipeOut->addToHeader("JOINMAZEROOM")
-	envVars.pPipeOut->addToColumn("Host")
-	envVars.pPipeOut->addToColumn("Type")
-	envVars.pPipeOut->addToColumn("Count")
-	envVars.pPipeOut->addToColumn("Max")
-	envVars.pPipeOut->addToColumn("Size")
-	
-	pRec = New Record()
-	pRec->addField(pRoom->getHostName())
-	pRec->addField(pRoom->gameType)
-	pRec->addField(Str(pRoom->numPlyr))
-	pRec->addField(Str(pRoom->maxPlyr))
-	pRec->addField(Str(pRoom->mapSize))
-	envVars.pPipeOut->addRecord(pRec)
+	writeRoomToTable(pRoom, envVars.pPipeOut)
 End Sub
 
 
@@ -118,11 +108,7 @@ Sub CMD_fetchMazeRooms(envVars As CmdEnv)
 	
 	If pServer->gameMan.pRoot <> 0 then
 		envVars.pPipeOut->addToHeader("MAZELIST")
-		envVars.pPipeOut->addToColumn("Host")
-		envVars.pPipeOut->addToColumn("Type")
-		envVars.pPipeOut->addToColumn("Count")
-		envVars.pPipeOut->addToColumn("Max")
-		envVars.pPipeOut->addToColumn("Size")
+		writeRoomColumns(envVars.pPipeOut)
 	End If
 	
 	/' DEBUG '/
@@ -139,14 +125,7 @@ Sub CMD_fetchMazeRooms(envVars As CmdEnv)
 	Dim As GameRoom Ptr pRoom = pServer->gameMan.pRoot
 	While pRoom <> 0
 		If pRoom->inSession = 0 Then
-			Dim As Record Ptr pRec = New Record()
-			pRec->addField(pRoom->getHostName())
-			pRec->addField(pRoom->gameType)
-			pRec->addField(Str(pRoom->numPlyr))
-			pRec->addField(Str(pRoom->maxPlyr))
-			pRec->addField(Str(pRoom->mapSize))
-			
-			envVars.pPipeOut->addRecord(pRec)
+			writeRoomRecord(pRoom, envVars.pPipeOut)
 		End If
 		
 		pRoom = pRoom->pNext
@@ -233,19 +212,7 @@ Sub CMD_joinMazeRoom(envVars As CmdEnv)
 	
 	/' Return game room data '/
 	envVars.pPipeOut->addToHeader("JOINMAZEROOM")
-	envVars.pPipeOut->addToColumn("Host")
-	envVars.pPipeOut->addToColumn("Type")
-	envVars.pPipeOut->addToColumn("Count")
-	envVars.pPipeOut->addToColumn("Max")
-	envVars.pPipeOut->addToColumn("Size")
-	
-	Dim As Record Ptr pRec = New Record()
-	pRec->addField(pRoom->getHostName())
-	pRec->addField(pRoom->gameType)
-	pRec->addField(Str(pRoom->numPlyr))
-	pRec->addField(Str(pRoom->maxPlyr))
-	pRec->addField(Str(pRoom->mapSize))
-	envVars.pPipeOut->addRecord(pRec)
+	writeRoomToTable(pRoom, envVars.pPipeOut)
 End Sub
 
 
@@ -262,7 +229,7 @@ End Sub
  '  
  '
  ' Returns:
- '
+ '	NULL maze room
  '/
 Sub CMD_leaveMazeRoom(envVars As CmdEnv)
 	Dim As Record Ptr pLineErr = 0
@@ -271,4 +238,7 @@ Sub CMD_leaveMazeRoom(envVars As CmdEnv)
 	ASSERT_NONNULL_ACCOUNT("CmdLeaveMazeRoom")
 	
 	pServer->gameMan.accountLeave(pClient->pAcc)
+	/' JOINMAZEROOM on empty room implies leaving '/
+	envVars.pPipeOut->addToHeader("JOINMAZEROOM")
+	writeRoomToTable(0, envVars.pPipeOut)
 End Sub
