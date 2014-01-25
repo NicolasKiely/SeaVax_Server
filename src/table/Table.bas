@@ -1,4 +1,5 @@
 #Include Once "Table.bi"
+#Include Once "Query.bi"
 
 
 
@@ -109,6 +110,21 @@ Function Record.getFieldByID(colID As Integer) As Fld Ptr
 	
 	/' Looped to end of field, return null '/
 	Return 0
+End Function
+
+
+Function Record.clone() As Record Ptr
+	Dim As Record Ptr pNew = New Record()
+	Dim As Fld Ptr pTmp = this.pFld
+	
+	While pTmp <> 0
+		/' Copy field value '/
+		pNew->addField(pTmp->value)
+		
+		pTmp = pTmp->pNext
+	Wend
+	
+	Return pNew
 End Function
 
 
@@ -600,3 +616,55 @@ Sub Table.removeRecordByField(value As String, colName As String)
 		pCurRec = pCurRec->pNext
 	Wend
 End Sub
+
+
+Sub copyTableColumns(pSrc As Table Ptr, pDst As Table Ptr)
+	If pSrc = 0 Or pDst = 0 Then Exit Sub
+	
+	Dim As Fld Ptr pCol = pSrc->pCol
+	While pCol <> 0
+		pDst->addToColumn(pCol->value)
+		pCol = pCol->pNext
+	Wend
+End Sub
+
+
+Function queryTable(pTable As Table Ptr, col As String, comp as String) As Table Ptr
+	If Len(comp) < 4 Then Return 0
+	If pTable = 0 Then Return 0
+	
+	Dim fComp As Function(As String, As String) As Integer
+	Dim As String value = Mid(comp, 4)
+	Dim As Table Ptr pQry
+	Dim As Record Ptr pRec
+	Dim As Integer index
+	Dim As Fld Ptr pFld
+	
+	/' Lookup Query comparison func '/
+	fComp = lookupQueryComparison(Left(comp, 3))
+	If fComp = 0 Then Return 0
+	
+	/' Create subquery table with same columns as original '/
+	pQry = New Table()
+	copyTableColumns(pTable, pQry)
+	
+	/' Lookup index for column '/
+	index = pTable->getColumnID(col)
+	
+	/' Run through records '/
+	pRec = pTable->pRec
+	While pRec <> 0
+		/' Look up relavent field '/
+		pFld = pRec->getFieldByID(index)
+		If (pFld = 0) Then Continue While
+	
+		If fComp(pFld->value, value) Then
+			/' Found match, add record to new table '/
+			pQry->addRecord(pRec->clone())
+		End If
+		
+		pRec = pRec->pNext
+	Wend
+	
+	Return pQry
+End Function

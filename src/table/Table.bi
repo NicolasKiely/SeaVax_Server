@@ -66,6 +66,9 @@ Type Record
 	/' Returns pointer to field by column id. 0 if not found '/
 	Declare Function getFieldByID(colID As Integer) As Fld Ptr
 	
+	/' Returns new clone of this record '/
+	Declare Function clone() As Record Ptr
+	
 	/' Dont make recursive to-string function, could overflow stack '/
 	
 	Declare Constructor()
@@ -150,3 +153,21 @@ Declare Function loadTableFromFile(fileName As String, pTable As Table Ptr = 0) 
  ' Turns a tab-delimited string to a record structure
  ---------------------------------------------------------------------------'/
 Declare Function loadRecordFromString(recStr As String) As Record Ptr
+
+
+/' Copies columns of one table to next '/
+Declare Sub copyTableColumns(pSrc As Table Ptr, pDst As Table Ptr)
+
+
+/' Returns a sub table from a query. Col is column name, cond is comparison
+ '  First three characters in comparison have special meaning.
+ '  First char should be $ (denoting string comparison) or # (numerical)
+ '  Next two are:
+ '   == Equal
+ '   != Not equal
+ '   <= Less than or equal
+ '   >= Greater than or equal
+ '   <_ Less than
+ '   >_ Greater than
+ '/
+Declare Function queryTable(pTable As Table Ptr, col As String, comp as String) As Table Ptr
