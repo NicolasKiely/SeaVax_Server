@@ -61,20 +61,20 @@ Sub CMD_createMazeGame(envVars As CmdEnv)
 	
 	/' Check to make sure player has an available map to use '/
 	Dim As Table Ptr pMazeTab = loadMazeStats(pClient->pAcc)
-	Dim As Record Ptr pRec = pMazeTab->getRecordByField(Str(size), MAZE_SIZE_HEADER)
-	/' TODO: use playerHasPublicMaze '/
 	
-	If pRec = 0 Then
+	/' Check to see if player has any maps of proper size '/
+	Dim As Table Ptr pQrySizeTab = queryTable(pMazeTab, MAZE_SIZE_HEADER, "#=="+Str(size))
+	Delete pMazeTab
+	
+	If pQrySizeTab->hasRecords()=0 Then
 		pLineErr = New Record()
 		pLineErr->addField("CmdCreateMazeGame")
 		pLineErr->addField("Player does not have proper maze to play")
 		pLineErr->addField("No maze found for size: " + Str(size))
 		envVars.pPipeErr->addRecord(pLineErr)
 		envVars.pPipeErr->addToHeader("DIALOG")
-		Delete pMazeTab
 		Exit Sub
 	EndIf
-	Delete pMazeTab
 	
 	/' So far so good '/
 	Dim As GameRoom Ptr pRoom = New GameRoom(pClient->pAcc, players, size, "1v1race")

@@ -95,6 +95,9 @@ Type Table
 	Dim As Integer RecNum
 	
 	
+	/' Returns -1 if table has proper record data, 0 otherwise '/
+	Declare Function hasRecords() As Integer
+	
 	/' Adds string to header. Returns 0 on success '/
 	Declare Function addToHeader(text As String) As Integer
 	

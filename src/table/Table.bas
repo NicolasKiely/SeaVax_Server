@@ -150,6 +150,13 @@ Destructor Table()
 End Destructor
 
 
+Function Table.hasRecords() As Integer
+	If this.pRec = 0 Then Return 0
+	If this.pRec->pFld = 0 Then Return 0
+	Return -1
+End Function
+
+
 Function Table.addToHeader(text As String) As Integer
 	Dim As Fld Ptr pNewFld = New Fld()
 	If pNewFld = 0 Then Return -1
