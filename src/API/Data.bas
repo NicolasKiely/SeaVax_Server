@@ -20,21 +20,25 @@
  ' -(d)irectory : sub directory to lookup
  '
  ' Returns:
- ' - text (Generic text for user):
- '		Directory/Command name
+ ' - type:
+ '		Whether entry is domain or command
+ ' - entry:
+ '		Name of command/domain
  '/
 Sub CMD_ListDirectory(envVars As CmdEnv)
 	CAST_ENV_PARS_MACRO()
 	
 	'Dim As Server Ptr pServer = CPtr(Server Ptr, envVars.aServer)
 	Dim As Record Ptr pLineErr = 0
+	Dim As Record Ptr pRec = 0
 	Dim As String dirName
 	
 	
 	
 	/' Set up header '/
 	envVars.pPipeOut->addToHeader("Query")
-	envVars.pPipeOut->addToColumn("Text")
+	envVars.pPipeOut->addToColumn("Type")
+	envVars.pPipeOut->addToColumn("Entry")
 	
 	Print envVars.pParam
 	
@@ -72,12 +76,18 @@ Sub CMD_ListDirectory(envVars As CmdEnv)
 	
 	/' Write to output '/
 	While pSubD <> 0
-		envVars.pPipeOut->addRecord(loadRecordFromString("d: " + pSubD->text))
+		pRec = New Record()
+		pRec->addField("d")
+		pRec->addField(pSubD->text)
+		envVars.pPipeOut->addRecord(pRec)
 		pSubD = pSubD->pNext
 	Wend
 	
 	While pC <> 0
-		envVars.pPipeOut->addRecord(loadRecordFromString("c: " + pC->text))
+		pRec = New Record()
+		pRec->addField("c")
+		pRec->addField(pC->text)
+		envVars.pPipeOut->addRecord(pRec)
 		pC = pC->pNext
 	Wend
 End Sub
